@@ -1,0 +1,46 @@
+# =============================================================================
+# Raw CSV Data Files (Ignored to prevent GitHub 100MB file size limit rejection)
+# Note: LED_NPA_New_2026_11.csv is ~105.7 MB which exceeds GitHub's 100MB limit.
+# The preprocessed ./data/*.js files are compact and kept tracked so index.html
+# works immediately on GitHub Pages / Netlify / Vercel or after git clone.
+# =============================================================================
+LED_Lega_*/
+*.csv
+
+# Uncomment the line below if you also want to ignore generated JS data chunks:
+# data/
+
+# =============================================================================
+# Python & Virtual Environments
+# =============================================================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+ENV/
+env/
+*.egg-info/
+.ipynb_checkpoints/
+
+# =============================================================================
+# IDE, Editor & OS Files
+# =============================================================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# =============================================================================
+# Temporary / Scratch Files
+# =============================================================================
+*.log
+*.tmp
+*.bak
+scratch/
