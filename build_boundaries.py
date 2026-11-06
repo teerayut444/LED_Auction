@@ -18,6 +18,7 @@ SUMMARY_FILE = os.path.join("data", "dashboard_summary.js")
 
 URL_DISTRICTS = "https://raw.githubusercontent.com/chingchai/OpenGISData-Thailand/master/districts.geojson"
 URL_SUBDISTRICTS = "https://raw.githubusercontent.com/chingchai/OpenGISData-Thailand/master/subdistricts.geojson"
+URL_PROVINCES = "https://raw.githubusercontent.com/chingchai/OpenGISData-Thailand/master/provinces.geojson"
 
 def ensure_dirs():
     os.makedirs(RAW_DIR, exist_ok=True)
@@ -57,9 +58,11 @@ def build():
 
     raw_districts = os.path.join(RAW_DIR, "districts.geojson")
     raw_subdistricts = os.path.join(RAW_DIR, "subdistricts.geojson")
+    raw_provinces = os.path.join(RAW_DIR, "provinces.geojson")
 
     download_file(URL_DISTRICTS, raw_districts)
     download_file(URL_SUBDISTRICTS, raw_subdistricts)
+    download_file(URL_PROVINCES, raw_provinces)
 
     prov_file_map = load_prov_file_map()
     print(f"Loaded prov_file_map with {len(prov_file_map)} provinces.")
@@ -69,6 +72,18 @@ def build():
         gj_d = json.load(f)
     with open(raw_subdistricts, "r", encoding="utf-8") as f:
         gj_s = json.load(f)
+    with open(raw_provinces, "r", encoding="utf-8") as f:
+        gj_p = json.load(f)
+
+    # Map province boundary geometry
+    prov_geoms = {}
+    for f in gj_p["features"]:
+        p_name = f.get("properties", {}).get("pro_th", "").strip()
+        if p_name and "geometry" in f and f["geometry"]:
+            prov_geoms[p_name] = {
+                "type": f["geometry"]["type"],
+                "coordinates": round_coords(f["geometry"]["coordinates"])
+            }
 
     # Group districts by province
     districts_by_prov = {}
@@ -128,6 +143,7 @@ def build():
         chunk_data = {
             "prov_name": prov_name,
             "p_code": p_code,
+            "prov_boundary": prov_geoms.get(prov_name),
             "amphoe": {
                 "type": "FeatureCollection",
                 "features": d_feats

@@ -1918,6 +1918,22 @@
             </select>
           </div>
 
+          <!-- Amphoe Select -->
+          <div class="pill-select-wrap">
+            <i class="ri-community-line pill-icon"></i>
+            <select class="pill-select" id="mapAmpSelect" onchange="onAmpSelectChange(this.value)">
+              <option value="ALL">ทุกอำเภอ/เขต</option>
+            </select>
+          </div>
+
+          <!-- Tambon Select -->
+          <div class="pill-select-wrap">
+            <i class="ri-map-pin-2-line pill-icon"></i>
+            <select class="pill-select" id="mapTamSelect" onchange="onTamSelectChange(this.value)">
+              <option value="ALL">ทุกตำบล/แขวง</option>
+            </select>
+          </div>
+
           <!-- Property Type Select -->
           <div class="pill-select-wrap">
             <i class="ri-home-4-line pill-icon"></i>
@@ -2475,6 +2491,8 @@
     let canvasLayerGroup = null;
     let zoneBubbleLayerGroup = null;
     let boundaryLayerGroup = null;
+    let pinnedAmpName = null;
+    let pinnedTamName = null;
     let heatLayer = null;
     let isHeatVisible = false;
     let isZoneBubblesVisible = true;
@@ -2692,6 +2710,11 @@
             mapInstance.addLayer(lightTileLayer);
           }
         }
+      }
+
+      if (boundaryLayerGroup && boundaryLayerGroup._currentKey) {
+        boundaryLayerGroup._currentKey = null;
+        updateBoundaryLayer();
       }
     }
 
@@ -3301,6 +3324,18 @@
       document.getElementById('mapPropType').value = 'ALL';
       document.getElementById('mapSaleType').value = 'ALL';
       document.getElementById('mapMaxPrice').value = '0';
+      pinnedAmpName = null;
+      pinnedTamName = null;
+      const ampSel = document.getElementById('mapAmpSelect');
+      const tamSel = document.getElementById('mapTamSelect');
+      if (ampSel) {
+        ampSel.innerHTML = '<option value="ALL">ทุกอำเภอ/เขต</option>';
+        ampSel.value = 'ALL';
+      }
+      if (tamSel) {
+        tamSel.innerHTML = '<option value="ALL">ทุกตำบล/แขวง</option>';
+        tamSel.value = 'ALL';
+      }
       closeInspector();
       closeBottomDrawer();
       if (mapInstance) mapInstance.setView([13.7563, 100.5018], 6);
@@ -3530,10 +3565,7 @@
         return;
       }
 
-      let showTambon = (zoom >= 12);
-      if (zoneGranularity === 'tambon') showTambon = true;
-      if (zoneGranularity === 'amphoe') showTambon = false;
-      const cacheKey = `${targetProv}_${showTambon ? 'tam' : 'amp'}`;
+      const cacheKey = `${targetProv}_${pinnedAmpName || 'NONE'}_${pinnedTamName || 'NONE'}_${zoom >= 12 ? 'Z12' : 'Z8'}`;
       if (boundaryLayerGroup._currentKey === cacheKey) {
         return;
       }
@@ -3548,125 +3580,460 @@
       boundaryLayerGroup.clearLayers();
       boundaryLayerGroup._currentKey = cacheKey;
 
-      const stats = computeBoundaryStats(targetProv);
-      const featureCollection = showTambon ? bData.tambon : bData.amphoe;
-      if (!featureCollection || !featureCollection.features || !featureCollection.features.length) return;
-
-      const defaultStyle = showTambon ? {
-        color: '#8b5cf6',
-        weight: 1.5,
-        dashArray: '3, 3',
-        fillColor: '#8b5cf6',
-        fillOpacity: 0.05
-      } : {
-        color: '#0284c7',
-        weight: 2,
-        dashArray: '5, 5',
-        fillColor: '#0284c7',
-        fillOpacity: 0.05
-      };
-
-      const geoLayer = L.geoJSON(featureCollection, {
-        style: () => ({ ...defaultStyle }),
-        onEachFeature: (feature, layer) => {
-          const props = feature.properties || {};
-          const name = props.name || '';
-          const ampName = showTambon ? (props.amp || '') : name;
-
-          let st = {};
-          const nName = normName(name);
-          const nAmp = normName(ampName);
-          if (showTambon) {
-            const tKey = `${nName}|${nAmp}`;
-            st = stats.tam[tKey] || {};
-            if (!st.soldCount && !st.npaCount) {
-              for (const k in stats.tam) {
-                if (k.startsWith(nName + '|') || (k.includes(nName) && k.includes(nAmp))) {
-                  st = stats.tam[k];
-                  break;
-                }
-              }
-            }
-          } else {
-            st = stats.amp[nName] || {};
-            if (!st.soldCount && !st.npaCount) {
-              for (const k in stats.amp) {
-                if (k.includes(nName) || nName.includes(k)) {
-                  st = stats.amp[k];
-                  break;
-                }
-              }
-            }
+      // 1. Inverted Mask: Dim other provinces outside targetProv while keeping targetProv completely clear
+      if (bData.prov_boundary) {
+        const rings = [];
+        if (bData.prov_boundary.type === 'Polygon') {
+          if (bData.prov_boundary.coordinates && bData.prov_boundary.coordinates.length) {
+            rings.push(bData.prov_boundary.coordinates[0]);
           }
-
-          const title = showTambon ? `ต.${name} (อ.${ampName})` : `อ.${name}`;
-          const sub = `จ.${targetProv}`;
-
-          const tooltipContent = `
-            <div style="font-family:Prompt,sans-serif; min-width:175px; padding:2px;">
-              <div style="font-weight:700; font-size:12.5px; color:${showTambon ? '#8b5cf6' : '#0284c7'}; margin-bottom:3px; display:flex; align-items:center; gap:5px;">
-                <i class="${showTambon ? 'ri-map-pin-2-line' : 'ri-government-line'}"></i> ${title}
-              </div>
-              <div style="font-size:10.5px; color:var(--text-secondary); margin-bottom:5px;">${sub}</div>
-              <div style="font-size:11.5px; display:flex; justify-content:space-between; margin-bottom:3px;">
-                <span style="color:var(--text-secondary);">รอขาย (NPA):</span>
-                <span style="font-weight:600; color:#10b981;">${fmtNum(st.npaCount || 0)} แปลง</span>
-              </div>
-              <div style="font-size:11.5px; display:flex; justify-content:space-between; margin-bottom:3px;">
-                <span style="color:var(--text-secondary);">ขายได้แล้ว:</span>
-                <span style="font-weight:600; color:#0284c7;">${fmtNum(st.soldCount || 0)} แปลง</span>
-              </div>
-              ${st.avgAppraisal > 0 ? `
-                <div style="font-size:10.5px; color:#f59e0b; margin-top:4px; border-top:1px dashed var(--border-color); padding-top:3px;">
-                  ประเมินเฉลี่ย: ~${fmtMillions(st.avgAppraisal)} ลบ.
-                </div>` : ''}
-              <div style="font-size:10px; color:#94a3b8; margin-top:5px; border-top:1px solid rgba(148,163,184,0.2); padding-top:3px;">
-                <i class="ri-cursor-line"></i> คลิกเพื่อซูมและเปิดรายการทรัพย์
-              </div>
-            </div>
-          `;
-
-          layer.bindTooltip(tooltipContent, {
-            sticky: true,
-            className: 'boundary-tooltip',
-            direction: 'auto'
-          });
-
-          layer.on('mouseover', (e) => {
-            const l = e.target;
-            l.setStyle({
-              color: '#f59e0b',
-              weight: 3,
-              dashArray: '',
-              fillColor: '#f59e0b',
-              fillOpacity: 0.18
-            });
-            if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-              l.bringToFront();
-            }
-          });
-
-          layer.on('mouseout', (e) => {
-            geoLayer.resetStyle(e.target);
-          });
-
-          layer.on('click', () => {
-            mapInstance.fitBounds(layer.getBounds(), { padding: [30, 30], maxZoom: showTambon ? 15 : 13 });
-            const zKey = showTambon ? `${name}|${ampName}|${targetProv}` : `${name}|${targetProv}`;
-            const zObj = {
-              key: zKey,
-              name: showTambon ? `ต.${name}` : `อ.${name}`,
-              sub: showTambon ? `อ.${ampName} จ.${targetProv}` : `จ.${targetProv}`,
-              prov: targetProv,
-              lat: props.lat || layer.getBounds().getCenter().lat,
-              lon: props.lon || layer.getBounds().getCenter().lng
-            };
-            selectZoneAndOpenDrawer(zObj, showTambon ? 'tambon' : 'amphoe');
+        } else if (bData.prov_boundary.type === 'MultiPolygon') {
+          (bData.prov_boundary.coordinates || []).forEach(poly => {
+            if (poly && poly[0]) rings.push(poly[0]);
           });
         }
-      });
 
-      boundaryLayerGroup.addLayer(geoLayer);
+        if (rings.length > 0) {
+          const worldMaskFeature = {
+            type: "Feature",
+            properties: { isMask: true },
+            geometry: {
+              type: "Polygon",
+              coordinates: [
+                [
+                  [-180, -85],
+                  [180, -85],
+                  [180, 85],
+                  [-180, 85],
+                  [-180, -85]
+                ],
+                ...rings
+              ]
+            }
+          };
+
+          const maskLayer = L.geoJSON(worldMaskFeature, {
+            style: {
+              stroke: false,
+              fillColor: '#050b14',
+              fillOpacity: currentTheme === 'dark' ? 0.65 : 0.45,
+              interactive: false
+            }
+          });
+          boundaryLayerGroup.addLayer(maskLayer);
+
+          // Province outer boundary line
+          const provBorderLayer = L.geoJSON(bData.prov_boundary, {
+            style: {
+              color: currentTheme === 'dark' ? '#38bdf8' : '#0284c7',
+              weight: 2.5,
+              dashArray: '',
+              fill: false,
+              interactive: false
+            }
+          });
+          boundaryLayerGroup.addLayer(provBorderLayer);
+        }
+      }
+
+      const stats = computeBoundaryStats(targetProv);
+
+      // 2. Amphoe Boundaries (Always drawn: when an amphoe is clicked, other amphoes become dark but KEEP their boundary lines!)
+      if (bData.amphoe && bData.amphoe.features && bData.amphoe.features.length) {
+        const ampGeoLayer = L.geoJSON(bData.amphoe, {
+          style: (feat) => {
+            const aName = feat.properties?.name || '';
+            const isThisAmpPinned = (pinnedAmpName && normName(aName) === normName(pinnedAmpName));
+
+            if (!pinnedAmpName) {
+              // No amphoe clicked: pure transparent borders for all amphoes!
+              return {
+                color: '#0284c7',
+                weight: 1.8,
+                dashArray: '4, 4',
+                opacity: 0.85,
+                fill: false,
+                fillOpacity: 0
+              };
+            } else if (isThisAmpPinned) {
+              // Clicked Amphoe: 100% transparent, prominent golden border
+              return {
+                color: '#f59e0b',
+                weight: 3.5,
+                dashArray: '',
+                opacity: 1,
+                fill: false,
+                fillOpacity: 0
+              };
+            } else {
+              // OTHER AMPHOES: Dimmed dark, BUT their boundary lines are clearly visible!
+              return {
+                color: '#38bdf8',
+                weight: 1.8,
+                dashArray: '4, 4',
+                opacity: 0.85,
+                fill: true,
+                fillColor: '#000000',
+                fillOpacity: 0.45
+              };
+            }
+          },
+          onEachFeature: (feat, layer) => {
+            const aName = feat.properties?.name || '';
+            const st = stats.amp[normName(aName)] || {};
+
+            const tooltipContent = `
+              <div style="font-family:Prompt,sans-serif; min-width:175px; padding:2px;">
+                <div style="font-weight:700; font-size:12.5px; color:#0284c7; margin-bottom:3px; display:flex; align-items:center; gap:5px;">
+                  <i class="ri-government-line"></i> อ.${aName}
+                </div>
+                <div style="font-size:10.5px; color:var(--text-secondary); margin-bottom:5px;">จ.${targetProv}</div>
+                <div style="font-size:11.5px; display:flex; justify-content:space-between; margin-bottom:3px;">
+                  <span style="color:var(--text-secondary);">รอขาย (NPA):</span>
+                  <span style="font-weight:600; color:#10b981;">${fmtNum(st.npaCount || 0)} แปลง</span>
+                </div>
+                <div style="font-size:11.5px; display:flex; justify-content:space-between; margin-bottom:3px;">
+                  <span style="color:var(--text-secondary);">ขายได้แล้ว:</span>
+                  <span style="font-weight:600; color:#0284c7;">${fmtNum(st.soldCount || 0)} แปลง</span>
+                </div>
+                ${st.avgAppraisal > 0 ? `
+                  <div style="font-size:10.5px; color:#f59e0b; margin-top:4px; border-top:1px dashed var(--border-color); padding-top:3px;">
+                    ประเมินเฉลี่ย: ~${fmtMillions(st.avgAppraisal)} ลบ.
+                  </div>` : ''}
+                <div style="font-size:10px; color:#94a3b8; margin-top:5px; border-top:1px solid rgba(148,163,184,0.2); padding-top:3px;">
+                  <i class="ri-cursor-line"></i> คลิกเพื่อโฟกัสอำเภอนี้ (หรี่อำเภออื่น)
+                </div>
+              </div>
+            `;
+
+            layer.bindTooltip(tooltipContent, {
+              sticky: true,
+              className: 'boundary-tooltip',
+              direction: 'auto'
+            });
+
+            layer.on('mouseover', (e) => {
+              const l = e.target;
+              if (!pinnedAmpName) {
+                l.setStyle({
+                  color: '#38bdf8',
+                  weight: 2.8,
+                  dashArray: '',
+                  fill: false,
+                  fillOpacity: 0
+                });
+                if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+                  l.bringToFront();
+                }
+              }
+            });
+
+            layer.on('mouseout', (e) => {
+              const l = e.target;
+              if (!pinnedAmpName) {
+                l.setStyle({
+                  color: '#0284c7',
+                  weight: 1.8,
+                  dashArray: '4, 4',
+                  opacity: 0.85,
+                  fill: false,
+                  fillOpacity: 0
+                });
+              }
+            });
+
+            layer.on('click', async (e) => {
+              if (e && e.originalEvent) e.originalEvent.stopPropagation();
+
+              if (pinnedAmpName === aName) {
+                // Click again to untoggle
+                pinnedAmpName = null;
+                pinnedTamName = null;
+                const ampSel = document.getElementById('mapAmpSelect');
+                if (ampSel) ampSel.value = 'ALL';
+                const tamSel = document.getElementById('mapTamSelect');
+                if (tamSel) tamSel.innerHTML = '<option value="ALL">ทุกตำบล/แขวง</option>';
+                boundaryLayerGroup._currentKey = null;
+                updateBoundaryLayer();
+                await renderMapPoints();
+                return;
+              }
+
+              // Focus on this amphoe:
+              pinnedAmpName = aName;
+              pinnedTamName = null;
+
+              // Synchronize Amphoe & Tambon Pill dropdowns
+              const ampSel = document.getElementById('mapAmpSelect');
+              if (ampSel) ampSel.value = aName;
+              await populateTamDropdown(targetProv, aName);
+
+              mapInstance.fitBounds(layer.getBounds(), { padding: [30, 30], maxZoom: 13 });
+              boundaryLayerGroup._currentKey = null;
+              updateBoundaryLayer();
+
+              const zObj = {
+                key: `${aName}|${targetProv}`,
+                name: `อ.${aName}`,
+                sub: `จ.${targetProv}`,
+                prov: targetProv,
+                lat: feat.properties?.lat || layer.getBounds().getCenter().lat,
+                lon: feat.properties?.lon || layer.getBounds().getCenter().lng
+              };
+              selectZoneAndOpenDrawer(zObj, 'amphoe');
+              await renderMapPoints();
+            });
+          }
+        });
+
+        boundaryLayerGroup.addLayer(ampGeoLayer);
+      }
+
+      // 3. Tambon Boundaries (rendered inside the active amphoe or on deep zoom)
+      if (bData.tambon && bData.tambon.features && bData.tambon.features.length) {
+        let tamFeatures = [];
+        if (pinnedAmpName) {
+          // Show tambons specifically inside the active amphoe
+          tamFeatures = bData.tambon.features.filter(f => normName(f.properties?.amp) === normName(pinnedAmpName));
+        } else if (zoom >= 12) {
+          tamFeatures = bData.tambon.features;
+        }
+
+        if (tamFeatures.length > 0) {
+          const tamGeoLayer = L.geoJSON(tamFeatures, {
+            style: (feat) => {
+              const tName = feat.properties?.name || '';
+              const isThisTamPinned = (pinnedTamName && normName(tName) === normName(pinnedTamName));
+              return {
+                color: isThisTamPinned ? '#f59e0b' : '#8b5cf6',
+                weight: isThisTamPinned ? 2.6 : 1.4,
+                dashArray: isThisTamPinned ? '' : '3, 3',
+                opacity: 0.9,
+                fill: isThisTamPinned ? true : false,
+                fillColor: isThisTamPinned ? '#f59e0b' : 'transparent',
+                fillOpacity: isThisTamPinned ? 0.15 : 0
+              };
+            },
+            onEachFeature: (feat, layer) => {
+              const tName = feat.properties?.name || '';
+              const aName = feat.properties?.amp || '';
+              const tKey = `${normName(tName)}|${normName(aName)}`;
+              const st = stats.tam[tKey] || {};
+
+              const tooltipContent = `
+                <div style="font-family:Prompt,sans-serif; min-width:170px; padding:2px;">
+                  <div style="font-weight:700; font-size:12px; color:#8b5cf6; margin-bottom:3px; display:flex; align-items:center; gap:5px;">
+                    <i class="ri-map-pin-2-line"></i> ต.${tName} (อ.${aName})
+                  </div>
+                  <div style="font-size:10.5px; color:var(--text-secondary); margin-bottom:4px;">จ.${targetProv}</div>
+                  <div style="font-size:11px; display:flex; justify-content:space-between; margin-bottom:2px;">
+                    <span style="color:var(--text-secondary);">รอขาย (NPA):</span>
+                    <span style="font-weight:600; color:#10b981;">${fmtNum(st.npaCount || 0)} แปลง</span>
+                  </div>
+                  <div style="font-size:11px; display:flex; justify-content:space-between; margin-bottom:2px;">
+                    <span style="color:var(--text-secondary);">ขายได้แล้ว:</span>
+                    <span style="font-weight:600; color:#0284c7;">${fmtNum(st.soldCount || 0)} แปลง</span>
+                  </div>
+                  <div style="font-size:10px; color:#94a3b8; margin-top:4px; border-top:1px solid rgba(148,163,184,0.2); padding-top:2px;">
+                    <i class="ri-cursor-line"></i> คลิกเพื่อเลือกตำบลนี้
+                  </div>
+                </div>
+              `;
+
+              layer.bindTooltip(tooltipContent, {
+                sticky: true,
+                className: 'boundary-tooltip',
+                direction: 'auto'
+              });
+
+              layer.on('click', async (e) => {
+                if (e && e.originalEvent) e.originalEvent.stopPropagation();
+                pinnedTamName = (pinnedTamName === tName) ? null : tName;
+                const tamSel = document.getElementById('mapTamSelect');
+                if (tamSel) tamSel.value = pinnedTamName || 'ALL';
+                boundaryLayerGroup._currentKey = null;
+                updateBoundaryLayer();
+
+                const zObj = {
+                  key: `${tName}|${aName}|${targetProv}`,
+                  name: `ต.${tName}`,
+                  sub: `อ.${aName} จ.${targetProv}`,
+                  prov: targetProv,
+                  lat: feat.properties?.lat || layer.getBounds().getCenter().lat,
+                  lon: feat.properties?.lon || layer.getBounds().getCenter().lng
+                };
+                selectZoneAndOpenDrawer(zObj, 'tambon');
+                await renderMapPoints();
+              });
+            }
+          });
+
+          boundaryLayerGroup.addLayer(tamGeoLayer);
+        }
+      }
+
+      if (!mapInstance._hasBoundaryClearListener) {
+        mapInstance._hasBoundaryClearListener = true;
+        mapInstance.on('click', async () => {
+          if (pinnedAmpName || pinnedTamName) {
+            pinnedAmpName = null;
+            pinnedTamName = null;
+            const ampSel = document.getElementById('mapAmpSelect');
+            if (ampSel) ampSel.value = 'ALL';
+            const tamSel = document.getElementById('mapTamSelect');
+            if (tamSel) tamSel.innerHTML = '<option value="ALL">ทุกตำบล/แขวง</option>';
+            boundaryLayerGroup._currentKey = null;
+            updateBoundaryLayer();
+            await renderMapPoints();
+          }
+        });
+      }
+    }
+
+    // =========================================================================
+    // AMPHOE & TAMBON PILL DROPDOWNS MANAGEMENT
+    // =========================================================================
+    async function populateAmpDropdown(provName) {
+      const ampSel = document.getElementById('mapAmpSelect');
+      const tamSel = document.getElementById('mapTamSelect');
+      if (!ampSel || !tamSel) return;
+
+      if (!provName || provName === 'ALL') {
+        ampSel.innerHTML = '<option value="ALL">ทุกอำเภอ/เขต</option>';
+        tamSel.innerHTML = '<option value="ALL">ทุกตำบล/แขวง</option>';
+        return;
+      }
+
+      ampSel.innerHTML = '<option value="ALL">ทุกอำเภอ/เขต</option>';
+      tamSel.innerHTML = '<option value="ALL">ทุกตำบล/แขวง</option>';
+
+      const bData = await loadBoundaryChunk(provName);
+      if (!bData || !bData.amphoe || !bData.amphoe.features) return;
+
+      const ampNames = bData.amphoe.features
+        .map(f => f.properties?.name || '')
+        .filter(Boolean)
+        .sort((a, b) => a.localeCompare(b, 'th'));
+
+      ampNames.forEach(aName => {
+        const opt = document.createElement('option');
+        opt.value = aName;
+        opt.textContent = `อ.${aName}`;
+        ampSel.appendChild(opt);
+      });
+    }
+
+    async function populateTamDropdown(provName, ampName) {
+      const tamSel = document.getElementById('mapTamSelect');
+      if (!tamSel) return;
+
+      tamSel.innerHTML = '<option value="ALL">ทุกตำบล/แขวง</option>';
+      if (!ampName || ampName === 'ALL' || !provName || provName === 'ALL') {
+        return;
+      }
+
+      const bData = await loadBoundaryChunk(provName);
+      if (!bData || !bData.tambon || !bData.tambon.features) return;
+
+      const nAmp = normName(ampName);
+      const tamNames = bData.tambon.features
+        .filter(f => normName(f.properties?.amp) === nAmp || f.properties?.amp === ampName)
+        .map(f => f.properties?.name || '')
+        .filter(Boolean)
+        .sort((a, b) => a.localeCompare(b, 'th'));
+
+      tamNames.forEach(tName => {
+        const opt = document.createElement('option');
+        opt.value = tName;
+        opt.textContent = `ต.${tName}`;
+        tamSel.appendChild(opt);
+      });
+    }
+
+    async function onAmpSelectChange(ampVal) {
+      const prov = document.getElementById('mapProvSelect')?.value || 'ALL';
+      if (!ampVal || ampVal === 'ALL') {
+        pinnedAmpName = null;
+        pinnedTamName = null;
+        const tamSel = document.getElementById('mapTamSelect');
+        if (tamSel) tamSel.innerHTML = '<option value="ALL">ทุกตำบล/แขวง</option>';
+        if (boundaryLayerGroup) {
+          boundaryLayerGroup._currentKey = null;
+          updateBoundaryLayer();
+        }
+        await renderMapPoints();
+        return;
+      }
+
+      pinnedAmpName = ampVal;
+      pinnedTamName = null;
+      await populateTamDropdown(prov, ampVal);
+
+      const bData = await loadBoundaryChunk(prov);
+      if (bData && bData.amphoe && bData.amphoe.features) {
+        const feat = bData.amphoe.features.find(f => normName(f.properties?.name) === normName(ampVal));
+        if (feat && mapInstance) {
+          const tempGeo = L.geoJSON(feat);
+          mapInstance.fitBounds(tempGeo.getBounds(), { padding: [30, 30], maxZoom: 13 });
+        }
+      }
+
+      if (boundaryLayerGroup) {
+        boundaryLayerGroup._currentKey = null;
+        updateBoundaryLayer();
+      }
+
+      const zObj = {
+        key: `${ampVal}|${prov}`,
+        name: `อ.${ampVal}`,
+        sub: `จ.${prov}`,
+        prov: prov,
+        lat: mapInstance.getCenter().lat,
+        lon: mapInstance.getCenter().lng
+      };
+      selectZoneAndOpenDrawer(zObj, 'amphoe');
+      await renderMapPoints();
+    }
+
+    async function onTamSelectChange(tamVal) {
+      const prov = document.getElementById('mapProvSelect')?.value || 'ALL';
+      const amp = document.getElementById('mapAmpSelect')?.value || 'ALL';
+      if (!tamVal || tamVal === 'ALL') {
+        pinnedTamName = null;
+        if (boundaryLayerGroup) {
+          boundaryLayerGroup._currentKey = null;
+          updateBoundaryLayer();
+        }
+        await renderMapPoints();
+        return;
+      }
+
+      pinnedTamName = tamVal;
+
+      const bData = await loadBoundaryChunk(prov);
+      if (bData && bData.tambon && bData.tambon.features) {
+        const feat = bData.tambon.features.find(f => normName(f.properties?.name) === normName(tamVal) && (amp === 'ALL' || normName(f.properties?.amp) === normName(amp)));
+        if (feat && mapInstance) {
+          const tempGeo = L.geoJSON(feat);
+          mapInstance.fitBounds(tempGeo.getBounds(), { padding: [30, 30], maxZoom: 15 });
+        }
+      }
+
+      if (boundaryLayerGroup) {
+        boundaryLayerGroup._currentKey = null;
+        updateBoundaryLayer();
+      }
+
+      const zObj = {
+        key: `${tamVal}|${amp}|${prov}`,
+        name: `ต.${tamVal}`,
+        sub: `อ.${amp} จ.${prov}`,
+        prov: prov,
+        lat: mapInstance.getCenter().lat,
+        lon: mapInstance.getCenter().lng
+      };
+      selectZoneAndOpenDrawer(zObj, 'tambon');
+      await renderMapPoints();
     }
 
     function toggleBoundaries(forceVal) {
@@ -3696,10 +4063,15 @@
 
     async function onMapFilterChange(zoomToProv = false) {
       const prov = document.getElementById('mapProvSelect').value;
-      if (zoomToProv && prov !== 'ALL' && mapInstance) {
-        const pInfo = window.LED_SUMMARY.provinces.find(p => p.province === prov);
-        if (pInfo) {
-          mapInstance.flyTo([pInfo.lat, pInfo.lon], 10, { duration: 0.8 });
+      if (zoomToProv) {
+        pinnedAmpName = null;
+        pinnedTamName = null;
+        await populateAmpDropdown(prov);
+        if (prov !== 'ALL' && mapInstance) {
+          const pInfo = window.LED_SUMMARY.provinces.find(p => p.province === prov);
+          if (pInfo) {
+            mapInstance.flyTo([pInfo.lat, pInfo.lon], 10, { duration: 0.8 });
+          }
         }
       }
       if (boundaryLayerGroup) boundaryLayerGroup._currentKey = null;
@@ -3776,8 +4148,13 @@
         sourceList = [...npaItems, ...soldItems];
       }
 
+      const ampVal = document.getElementById('mapAmpSelect')?.value || 'ALL';
+      const tamVal = document.getElementById('mapTamSelect')?.value || 'ALL';
+
       const filtered = sourceList.filter(item => {
         if (prov !== 'ALL' && item[9] !== prov) return false;
+        if (ampVal !== 'ALL' && normName(item[8]) !== normName(ampVal)) return false;
+        if (tamVal !== 'ALL' && normName(item[7]) !== normName(tamVal)) return false;
         if (propType !== 'ALL' && item[2] !== propType) return false;
         if (saleType !== 'ALL' && item[3] !== saleType) return false;
         if (maxPrice > 0 && item[4] > maxPrice) return false;
@@ -4183,9 +4560,14 @@
       const zoom = mapInstance.getZoom();
       const bounds = mapInstance.getBounds();
 
+      const ampVal = document.getElementById('mapAmpSelect')?.value || 'ALL';
+      const tamVal = document.getElementById('mapTamSelect')?.value || 'ALL';
+
       // 1. Filter sold properties by active dropdown criteria
       let baseFiltered = soldAll.filter(item => {
         if (prov !== 'ALL' && item[9] !== prov) return false;
+        if (ampVal !== 'ALL' && normName(item[8]) !== normName(ampVal)) return false;
+        if (tamVal !== 'ALL' && normName(item[7]) !== normName(tamVal)) return false;
         if (propType !== 'ALL' && item[2] !== propType) return false;
         if (saleType !== 'ALL' && item[3] !== saleType) return false;
         if (maxPrice > 0 && item[4] > maxPrice) return false;
@@ -4865,6 +5247,18 @@
       if (targetPulseMarker && mapInstance) {
         mapInstance.removeLayer(targetPulseMarker);
         targetPulseMarker = null;
+      }
+      if (pinnedAmpName || pinnedTamName) {
+        pinnedAmpName = null;
+        pinnedTamName = null;
+        const ampSel = document.getElementById('mapAmpSelect');
+        if (ampSel) ampSel.value = 'ALL';
+        const tamSel = document.getElementById('mapTamSelect');
+        if (tamSel) tamSel.innerHTML = '<option value="ALL">ทุกตำบล/แขวง</option>';
+        if (boundaryLayerGroup && boundaryLayerGroup._currentKey) {
+          boundaryLayerGroup._currentKey = null;
+          updateBoundaryLayer();
+        }
       }
     }
 
@@ -5657,6 +6051,7 @@
         expProv.appendChild(opt2);
       });
 
+      populateAmpDropdown(mapProv.value);
       initOverviewTab();
       renderProvinceTable();
       renderCreditorTable();
