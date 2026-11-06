@@ -10,6 +10,7 @@ and exports compact JavaScript data chunks into ./data/ for zero-CORS offline HT
 import os
 import json
 import re
+import urllib.parse
 import numpy as np
 import pandas as pd
 
@@ -196,6 +197,20 @@ def main():
         rec_df = pd.concat(recovered_rows, ignore_index=True)
         common_cols = [c for c in sold_enriched.columns if c in rec_df.columns]
         sold_enriched = pd.concat([sold_enriched, rec_df[common_cols]], ignore_index=True)
+
+    def ensure_bridge_link(row):
+        existing = str(row.get("ลิงก์", "")).strip()
+        if existing and existing != "nan" and "led_bridge.html" in existing:
+            return existing
+        case = str(row.get("case_clean", "")).split("_")[0].strip()
+        court = str(row.get("ศาล", "")).strip()
+        court_param = f"&court={urllib.parse.quote(court)}" if court and court != "nan" else ""
+        if "/" in case:
+            parts = case.split("/")
+            return f"app/static/led_bridge.html?mode=sold&suit_no={urllib.parse.quote(parts[0].strip())}&suit_year={urllib.parse.quote(parts[1].strip())}{court_param}"
+        return f"app/static/led_bridge.html?mode=sold&suit_no={urllib.parse.quote(case)}{court_param}"
+
+    sold_enriched["ลิงก์"] = sold_enriched.apply(ensure_bridge_link, axis=1)
 
     # Calculate unit prices on sold_enriched
     sold_enriched["unit_area"] = np.where(

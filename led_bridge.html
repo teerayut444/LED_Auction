@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>เชื่อมต่อไปยังระบบค้นหาข้อมูลทรัพย์ - กรมบังคับคดี (LED Bridge)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-dark: #090d16;
+      --card-bg: rgba(17, 24, 39, 0.95);
+      --border-color: rgba(255, 255, 255, 0.1);
+      --accent-blue: #3b82f6;
+      --accent-cyan: #06b6d4;
+      --accent-gold: #f59e0b;
+      --accent-emerald: #10b981;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Prompt', 'Sarabun', sans-serif;
+      background: radial-gradient(circle at 50% 20%, #1e293b 0%, var(--bg-dark) 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+
+    .bridge-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      width: 100%;
+      max-width: 550px;
+      padding: 36px 32px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6), 0 0 30px rgba(59, 130, 246, 0.15);
+      text-align: center;
+      position: relative;
+      animation: fadeInScale 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes fadeInScale {
+      from { opacity: 0; transform: scale(0.95) translateY(10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .emblem-wrapper {
+      position: relative;
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .emblem-glow {
+      position: absolute;
+      inset: -6px;
+      border-radius: 50%;
+      background: conic-gradient(from 0deg, #3b82f6, #06b6d4, #f59e0b, #3b82f6);
+      filter: blur(10px);
+      opacity: 0.6;
+      animation: rotateGlow 3s linear infinite;
+    }
+
+    @keyframes rotateGlow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .emblem-icon {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #1e3a8a, #0f172a);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 38px;
+      color: #fbbf24;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 14px;
+      border-radius: 9999px;
+      background: rgba(59, 130, 246, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      color: #93c5fd;
+      font-size: 12.5px;
+      font-weight: 500;
+      margin-bottom: 14px;
+    }
+
+    .badge-pill.npa-mode {
+      background: rgba(16, 185, 129, 0.15);
+      border-color: rgba(16, 185, 129, 0.3);
+      color: #6ee7b7;
+    }
+
+    h1 {
+      font-size: 21px;
+      font-weight: 700;
+      line-height: 1.4;
+      margin-bottom: 8px;
+      color: #ffffff;
+      letter-spacing: -0.3px;
+    }
+
+    .subtitle {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    .data-summary-box {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      text-align: left;
+    }
+
+    .data-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
+      font-size: 13.5px;
+    }
+
+    .data-row:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .data-row:first-child {
+      padding-top: 0;
+    }
+
+    .data-label {
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .data-value {
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    .val-highlight {
+      font-size: 16px;
+      font-weight: 700;
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.1);
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+
+    .val-court {
+      color: #fbbf24;
+      font-weight: 600;
+    }
+
+    .progress-bar-container {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 9999px;
+      overflow: hidden;
+      margin-bottom: 24px;
+      position: relative;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #3b82f6, #06b6d4, #10b981);
+      width: 0%;
+      border-radius: 9999px;
+      transition: width 0.3s ease-out;
+    }
+
+    .action-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 13px 20px;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+      text-decoration: none;
+    }
+
+    .action-btn:hover {
+      background: linear-gradient(135deg, #1d4ed8, #1e40af);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.45);
+    }
+
+    .action-btn:active {
+      transform: translateY(0);
+    }
+
+    .meta-footer {
+      margin-top: 18px;
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .meta-footer a {
+      color: #60a5fa;
+      text-decoration: none;
+    }
+
+    .meta-footer a:hover {
+      text-decoration: underline;
+    }
+
+    #manualSearchBox {
+      display: none;
+      margin-top: 16px;
+      text-align: left;
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 12.5px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .form-input {
+      width: 100%;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 14px;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bridge-card">
+    <div class="emblem-wrapper">
+      <div class="emblem-glow"></div>
+      <div class="emblem-icon">
+        <i class="ri-government-line"></i>
+      </div>
+    </div>
+
+    <div class="badge-pill" id="bridgeBadge">
+      <i class="ri-scales-3-line"></i> LED Auction Bridge • กรมบังคับคดี
+    </div>
+
+    <h1 id="bridgeStatusTitle">กำลังค้นหาข้อมูลทรัพย์...</h1>
+    <p class="subtitle" id="bridgeSubtitle">
+      ระบบกำลังส่งคำขอกรองหมายเลขคดีแดง, ปี พ.ศ. และ ศาล ไปยังเซิร์ฟเวอร์กรมบังคับคดี
+    </p>
+
+    <!-- Data Summary Box -->
+    <div class="data-summary-box">
+      <div class="data-row">
+        <span class="data-label"><i class="ri-file-text-line"></i> หมายเลขคดีแดง:</span>
+        <span class="data-value val-highlight" id="lblSuitNo">-</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label"><i class="ri-calendar-line"></i> ปี พ.ศ.:</span>
+        <span class="data-value val-highlight" id="lblSuitYear">-</span>
+      </div>
+      <div class="data-row" id="rowCourt" style="display:none;">
+        <span class="data-label"><i class="ri-building-line"></i> ศาล:</span>
+        <span class="data-value val-court" id="lblCourt">-</span>
+      </div>
+      <div class="data-row" id="rowPerson" style="display:none;">
+        <span class="data-label"><i class="ri-user-star-line"></i> โจทก์:</span>
+        <span class="data-value" id="lblPerson">-</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label"><i class="ri-links-line"></i> ระบบปลายทาง:</span>
+        <span class="data-value" id="lblTargetSystem" style="color:#94a3b8; font-size:12px;">asset.led.go.th</span>
+      </div>
+    </div>
+
+    <!-- Animated Progress Bar -->
+    <div class="progress-bar-container">
+      <div class="progress-bar-fill" id="progressBar"></div>
+    </div>
+
+    <!-- Manual Action Button (Auto-triggered or Clickable fallback) -->
+    <button type="button" class="action-btn" id="btnSubmitNow" onclick="executePost()">
+      <i class="ri-external-link-line"></i> เปิดค้นหาในกรมบังคับคดีทันที
+    </button>
+
+    <!-- Manual fallback form if opened without params -->
+    <div id="manualSearchBox">
+      <div class="form-group">
+        <label class="form-label">ประเภทระบบ:</label>
+        <select id="manualMode" class="form-input" onchange="toggleManualCourtField()">
+          <option value="npa">ค้นหาทรัพย์ประกาศรอขาย (asset_search_law_suit.asp)</option>
+          <option value="sold">ค้นหารายงานขายทอดตลาด (reports.asp)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">หมายเลขคดีแดง (เช่น ผบE.2890 หรือ 2890):</label>
+        <input type="text" id="manualSuitNo" class="form-input" placeholder="ระบุหมายเลขคดีแดง">
+      </div>
+      <div class="form-group">
+        <label class="form-label">ปี พ.ศ. (เช่น 2567):</label>
+        <input type="text" id="manualSuitYear" class="form-input" placeholder="ระบุปี พ.ศ.">
+      </div>
+      <div class="form-group" id="manualCourtGroup">
+        <label class="form-label">ศาล (เช่น จังหวัดกระบี่ หรือ แพ่งกรุงเทพใต้):</label>
+        <input type="text" id="manualCourt" class="form-input" placeholder="ระบุชื่อศาล">
+      </div>
+      <button type="button" class="action-btn" style="margin-top:8px;" onclick="executeManualPost()">
+        <i class="ri-search-line"></i> ค้นหาในระบบกรมบังคับคดี
+      </button>
+    </div>
+
+    <div class="meta-footer">
+      <span>หากหน้าต่างไม่เปลี่ยนอัตโนมัติ กรุณากดปุ่มด้านบน</span> • 
+      <a href="index.html" id="backToDashLink"><i class="ri-arrow-left-line"></i> กลับสู่ Dashboard</a>
+    </div>
+  </div>
+
+  <!-- Form 1: Mode Sold -> asset.led.go.th/report/reports.asp -->
+  <form id="ledSoldForm" method="POST" action="https://asset.led.go.th/report/reports.asp" accept-charset="utf-8">
+    <input type="hidden" name="ALAW_SUIT_NO" id="sold_suit_no" value="">
+    <input type="hidden" name="ALAW_SUIT_YEAR" id="sold_suit_year" value="">
+    <input type="hidden" name="person1" id="sold_person1" value="">
+    <input type="hidden" name="startdate" id="sold_startdate" value="">
+    <input type="hidden" name="Action" value="ค้นหา">
+  </form>
+
+  <!-- Form 2: Mode NPA (รอการขาย) -> asset.led.go.th/newbidreg/asset_search_law_suit.asp -->
+  <form id="ledNpaForm" method="POST" action="https://asset.led.go.th/newbidreg/asset_search_law_suit.asp" accept-charset="utf-8">
+    <input type="hidden" name="search_law_suit_no" id="npa_suit_no" value="">
+    <input type="hidden" name="search_law_suit_year" id="npa_suit_year" value="">
+    <input type="hidden" name="search_law_court_name" id="npa_court" value="">
+    <input type="hidden" name="search_owner_suit_name" value="">
+    <input type="hidden" name="search_person1" id="npa_person1" value="">
+    <input type="hidden" name="search" value="ok">
+  </form>
+
+  <script>
+    function getQueryParams() {
+      const params = new URLSearchParams(window.location.search);
+      let mode = (params.get('mode') || '').toLowerCase();
+      let suitNo = params.get('suit_no') || params.get('case_no') || params.get('search_law_suit_no') || params.get('ALAW_SUIT_NO') || '';
+      let suitYear = params.get('suit_year') || params.get('year') || params.get('search_law_suit_year') || params.get('ALAW_SUIT_YEAR') || '';
+      let court = params.get('court') || params.get('search_law_court_name') || '';
+      let caseFull = params.get('case') || params.get('red_case') || '';
+      let person1 = params.get('person1') || params.get('plaintiff') || params.get('search_person1') || '';
+      let startdate = params.get('startdate') || '';
+
+      try {
+        if (suitNo) suitNo = decodeURIComponent(suitNo).trim();
+        if (suitYear) suitYear = decodeURIComponent(suitYear).trim();
+        if (court) court = decodeURIComponent(court).trim();
+        if (caseFull) caseFull = decodeURIComponent(caseFull).trim();
+        if (person1) person1 = decodeURIComponent(person1).trim();
+      } catch (e) {
+        console.warn('URI decode fallback:', e);
+      }
+
+      const combined = caseFull || suitNo;
+      if (combined && combined.includes('/')) {
+        const cleanCombined = combined.split('_')[0].trim();
+        const parts = cleanCombined.split('/');
+        suitNo = parts[0].trim();
+        if (!suitYear) {
+          const ym = parts[1].match(/\d{4}/);
+          suitYear = ym ? ym[0] : parts[1].trim();
+        }
+      }
+
+      if (suitNo.includes('_')) {
+        suitNo = suitNo.split('_')[0].trim();
+      }
+
+      if (court === '-' || court.toLowerCase() === 'nan') {
+        court = '';
+      }
+
+      if (!mode) {
+        if (params.get('npa') === '1' || params.get('active') === '1' || (court && mode !== 'sold')) {
+          mode = 'npa';
+        } else {
+          mode = 'sold';
+        }
+      }
+
+      return { mode, suitNo, suitYear, court, person1, startdate };
+    }
+
+    let parsedData = getQueryParams();
+
+    function initBridge() {
+      const { mode, suitNo, suitYear, court, person1, startdate } = parsedData;
+
+      if (!suitNo && !suitYear) {
+        document.getElementById('bridgeStatusTitle').textContent = 'ระบบเชื่อมต่อค้นหาข้อมูล กรมบังคับคดี';
+        document.getElementById('bridgeSubtitle').textContent = 'กรุณาระบุหมายเลขคดีแดง, ปี พ.ศ. และ ศาล ที่ต้องการค้นหา';
+        document.getElementById('progressBar').parentElement.style.display = 'none';
+        document.getElementById('btnSubmitNow').style.display = 'none';
+        document.getElementById('manualSearchBox').style.display = 'block';
+        return;
+      }
+
+      document.getElementById('lblSuitNo').textContent = suitNo || '(ไม่ระบุ)';
+      document.getElementById('lblSuitYear').textContent = suitYear || '(ทุกปี พ.ศ.)';
+      
+      if (court) {
+        document.getElementById('rowCourt').style.display = 'flex';
+        document.getElementById('lblCourt').textContent = court;
+      }
+      if (person1) {
+        document.getElementById('rowPerson').style.display = 'flex';
+        document.getElementById('lblPerson').textContent = person1;
+      }
+
+      if (mode === 'npa') {
+        const badge = document.getElementById('bridgeBadge');
+        badge.className = 'badge-pill npa-mode';
+        badge.innerHTML = '<i class="ri-auction-line"></i> LED NPA Search Bridge • ทรัพย์ประกาศรอขายทอดตลาด';
+        document.getElementById('bridgeStatusTitle').textContent = 'กำลังค้นหาทรัพย์ประกาศขายทอดตลาด...';
+        document.getElementById('bridgeSubtitle').textContent = 'ระบบกำลังส่งคำขอกรองหมายเลขคดีแดง, ปี พ.ศ. และ ศาล ไปยังเซิร์ฟเวอร์กรมบังคับคดี (newbidreg)';
+        document.getElementById('lblTargetSystem').textContent = 'asset.led.go.th/newbidreg/asset_search_law_suit.asp';
+
+        document.getElementById('npa_suit_no').value = suitNo;
+        document.getElementById('npa_suit_year').value = suitYear;
+        document.getElementById('npa_court').value = court;
+        document.getElementById('npa_person1').value = person1;
+      } else {
+        document.getElementById('bridgeStatusTitle').textContent = 'กำลังค้นหาข้อมูลผลการขายทอดตลาด...';
+        document.getElementById('bridgeSubtitle').textContent = 'ระบบกำลังส่งคำขอกรองหมายเลขคดีแดงและปี พ.ศ. ไปยังเซิร์ฟเวอร์กรมบังคับคดี (report)';
+        document.getElementById('lblTargetSystem').textContent = 'asset.led.go.th/report/reports.asp';
+
+        document.getElementById('sold_suit_no').value = suitNo;
+        document.getElementById('sold_suit_year').value = suitYear;
+        document.getElementById('sold_person1').value = person1;
+        document.getElementById('sold_startdate').value = startdate;
+      }
+
+      const pBar = document.getElementById('progressBar');
+      setTimeout(() => { pBar.style.width = '70%'; }, 50);
+
+      setTimeout(() => {
+        pBar.style.width = '100%';
+        executePost();
+      }, 350);
+    }
+
+    function executePost() {
+      const { mode } = parsedData;
+      if (mode === 'npa') {
+        const form = document.getElementById('ledNpaForm');
+        if (form) {
+          document.getElementById('bridgeStatusTitle').textContent = 'กำลังเปิดรายการประกาศขายทอดตลาด...';
+          form.submit();
+        }
+      } else {
+        const form = document.getElementById('ledSoldForm');
+        if (form) {
+          document.getElementById('bridgeStatusTitle').textContent = 'กำลังเปิดรายงานผลการขาย...';
+          form.submit();
+        }
+      }
+    }
+
+    function toggleManualCourtField() {
+      const mode = document.getElementById('manualMode').value;
+      document.getElementById('manualCourtGroup').style.display = mode === 'npa' ? 'block' : 'none';
+    }
+
+    function executeManualPost() {
+      const mode = document.getElementById('manualMode').value;
+      const suitNo = document.getElementById('manualSuitNo').value.trim();
+      const suitYear = document.getElementById('manualSuitYear').value.trim();
+      const court = document.getElementById('manualCourt').value.trim();
+
+      if (!suitNo && !suitYear) {
+        alert('กรุณากรอกหมายเลขคดีแดง หรือ ปี พ.ศ.');
+        return;
+      }
+
+      parsedData = { mode, suitNo, suitYear, court, person1: '', startdate: '' };
+      if (mode === 'npa') {
+        document.getElementById('npa_suit_no').value = suitNo;
+        document.getElementById('npa_suit_year').value = suitYear;
+        document.getElementById('npa_court').value = court;
+      } else {
+        document.getElementById('sold_suit_no').value = suitNo;
+        document.getElementById('sold_suit_year').value = suitYear;
+      }
+      executePost();
+    }
+
+    window.addEventListener('DOMContentLoaded', initBridge);
+  </script>
+</body>
+</html>

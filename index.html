@@ -554,51 +554,169 @@
       z-index: 1;
     }
 
-    /* Floating Map Control Panel */
-    .map-panel {
+    /* =====================================================================
+       FLOATING GIS PILL BAR (TOP-LEFT 2 ROWS - ULTRA SLEEK & ERGONOMIC)
+       ===================================================================== */
+    .gis-pill-bar {
       position: absolute;
       top: 16px;
       left: 16px;
-      width: 365px;
-      max-height: calc(100% - 32px);
-      overflow-y: auto;
-      background: var(--bg-panel);
-      backdrop-filter: blur(14px);
-      border: 1px solid var(--border-color);
-      border-radius: 14px;
-      padding: 16px;
-      z-index: 1000;
-      box-shadow: var(--panel-shadow);
-      transition: transform 0.25s ease;
+      z-index: 1002;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      max-width: calc(100% - 460px);
+      pointer-events: none;
     }
 
-    .map-panel.collapsed {
-      transform: translateX(-390px);
-    }
-
-    .map-panel-toggle {
-      position: absolute;
-      top: 16px;
-      left: 392px;
-      z-index: 1001;
-      background: var(--bg-panel);
-      color: var(--text-primary);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 8px 12px;
-      font-family: inherit;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      box-shadow: var(--card-shadow);
-      display: inline-flex;
+    .pill-row {
+      display: flex;
       align-items: center;
       gap: 6px;
-      transition: left 0.25s ease;
+      flex-wrap: wrap;
+      pointer-events: auto;
     }
 
-    .map-panel.collapsed + .map-panel-toggle {
-      left: 16px;
+    .pill-select-wrap {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      background: var(--bg-panel);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-color);
+      border-radius: 999px;
+      padding: 0 10px 0 12px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+      transition: all 0.15s ease;
+      height: 34px;
+    }
+
+    .pill-select-wrap:hover,
+    .pill-select-wrap:focus-within {
+      border-color: var(--accent-blue);
+      box-shadow: 0 3px 12px rgba(37, 99, 235, 0.2);
+    }
+
+    .pill-select-wrap .pill-icon {
+      color: var(--accent-blue);
+      font-size: 14px;
+      margin-right: 6px;
+      flex-shrink: 0;
+    }
+
+    .pill-select {
+      appearance: none;
+      -webkit-appearance: none;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      padding-right: 18px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right center;
+      max-width: 175px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .pill-select option {
+      background: var(--bg-card);
+      color: var(--text-primary);
+      font-size: 13px;
+    }
+
+    .pill-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      height: 34px;
+      padding: 0 12px;
+      border-radius: 999px;
+      background: var(--bg-panel);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+      transition: all 0.15s ease;
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    .pill-btn:hover {
+      border-color: var(--accent-blue);
+      background: var(--table-row-hover);
+      color: var(--accent-blue);
+    }
+
+    .pill-btn.active {
+      background: var(--accent-blue);
+      border-color: var(--accent-blue);
+      color: #ffffff;
+      box-shadow: 0 2px 10px rgba(37, 99, 235, 0.35);
+    }
+
+    .pill-status {
+      display: inline-flex;
+      align-items: center;
+      height: 34px;
+      padding: 0 12px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.72);
+      backdrop-filter: blur(12px);
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 600;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.16);
+      white-space: nowrap;
+      pointer-events: auto;
+    }
+
+    /* =====================================================================
+       MINI HORIZONTAL LEGEND BAR (BOTTOM-RIGHT - CLEAN & SLEEK)
+       ===================================================================== */
+    .mini-legend-bar {
+      position: absolute;
+      bottom: 16px;
+      right: 436px;
+      z-index: 1001;
+      background: var(--bg-panel);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-color);
+      border-radius: 999px;
+      padding: 6px 14px;
+      box-shadow: var(--panel-shadow);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 11.5px;
+      color: var(--text-secondary);
+      transition: bottom 0.3s cubic-bezier(0.16, 1, 0.3, 1), right 0.28s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      user-select: none;
+      pointer-events: auto;
+      white-space: nowrap;
+    }
+
+    .legend-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+    }
+
+    .legend-chip .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
     }
 
     /* Right Spatial Intelligence Sidebar (Zones + KPIs + Property Inspector) */
@@ -606,7 +724,7 @@
       position: absolute;
       top: 16px;
       right: 16px;
-      width: 420px;
+      width: 410px;
       max-height: calc(100% - 32px);
       display: flex;
       flex-direction: column;
@@ -614,35 +732,35 @@
       backdrop-filter: blur(16px);
       border: 1px solid var(--border-color);
       border-radius: 14px;
-      z-index: 1002;
+      z-index: 1003;
       box-shadow: var(--panel-shadow);
-      transition: transform 0.25s ease;
+      transition: max-height 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.38s cubic-bezier(0.34, 1.56, 0.64, 1);
       overflow: hidden;
     }
 
     .right-sidebar.collapsed {
-      transform: translateX(445px);
+      transform: translateX(455px);
     }
 
     .right-sidebar-toggle {
       position: absolute;
       top: 16px;
-      right: 446px;
+      right: 436px;
       z-index: 1003;
       background: var(--bg-panel);
       color: var(--text-primary);
       border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 8px 12px;
+      border-radius: 999px;
+      padding: 7px 12px;
       font-family: inherit;
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 600;
       cursor: pointer;
       box-shadow: var(--card-shadow);
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      transition: right 0.25s ease;
+      transition: right 0.28s ease;
     }
 
     .right-sidebar.collapsed + .right-sidebar-toggle {
@@ -660,6 +778,118 @@
       padding: 14px 16px;
       overflow-y: auto;
       flex: 1;
+      scroll-behavior: smooth;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(148, 163, 184, 0.45) transparent;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .rs-body::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .rs-body::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .rs-body::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.45);
+      border-radius: 999px;
+    }
+
+    .rs-body::-webkit-scrollbar-thumb:hover {
+      background: rgba(148, 163, 184, 0.7);
+    }
+
+    /* Inspector Bouncy Spring Animations & Unit Carousel */
+    @keyframes inspectorSpringPop {
+      0% {
+        opacity: 0.25;
+        transform: translateX(38px) scale(0.95);
+      }
+      55% {
+        opacity: 1;
+        transform: translateX(-10px) scale(1.02);
+      }
+      78% {
+        transform: translateX(3px) scale(0.995);
+      }
+      100% {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+      }
+    }
+
+    .inspector-spring-bouncing {
+      animation: inspectorSpringPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both !important;
+    }
+
+    @keyframes cardSpringPop {
+      0% {
+        opacity: 0.3;
+        transform: translateY(14px) scale(0.97);
+      }
+      65% {
+        opacity: 1;
+        transform: translateY(-3px) scale(1.01);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .card-spring-pop {
+      animation: cardSpringPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+
+    .insp-chips-scroll {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding: 4px 2px 6px 2px;
+      scrollbar-width: thin;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .insp-chips-scroll::-webkit-scrollbar {
+      height: 4px;
+    }
+
+    .insp-chips-scroll::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.45);
+      border-radius: 999px;
+    }
+
+    .insp-chip {
+      flex-shrink: 0;
+      padding: 4px 9px;
+      border-radius: 6px;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    .insp-chip:hover {
+      background: var(--table-row-hover);
+      border-color: var(--accent-blue);
+      color: var(--text-primary);
+    }
+
+    .insp-chip.active {
+      background: var(--accent-blue);
+      border-color: var(--accent-blue);
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(37, 99, 235, 0.35);
     }
 
     /* Segmented Unit Switcher (% vs บาท) */
@@ -736,7 +966,7 @@
     .hl-card {
       background: var(--bg-subtle);
       border: 1px solid var(--border-color);
-      border-left: 3.5px solid var(--accent-rose);
+      border-left: 3.5px solid var(--accent-emerald);
       border-radius: 8px;
       padding: 8px 10px;
       cursor: pointer;
@@ -744,7 +974,7 @@
     }
 
     .hl-card.discount {
-      border-left-color: var(--accent-emerald);
+      border-left-color: var(--accent-rose);
     }
 
     .hl-card:hover {
@@ -807,43 +1037,239 @@
     }
 
     .zone-map-pill.premium {
-      border-color: #ef4444;
-      background: rgba(239, 68, 68, 0.92);
+      border-color: #10b981;
+      background: rgba(16, 185, 129, 0.94);
       color: #ffffff;
     }
 
     .zone-map-pill.discount {
-      border-color: #10b981;
-      background: rgba(16, 185, 129, 0.92);
+      border-color: #ef4444;
+      background: rgba(239, 68, 68, 0.94);
       color: #ffffff;
     }
 
     .zone-map-pill.neutral {
       border-color: #f59e0b;
-      background: rgba(245, 158, 11, 0.92);
+      background: rgba(245, 158, 11, 0.94);
       color: #ffffff;
     }
 
-    /* Bottom Zone Property Drawer on Map */
+    /* =====================================================================
+       CUSTOM ICON MAP PINS (TEARDROP / MULTI-UNIT / CENTROID) & BOUNCY POPUP
+       ===================================================================== */
+    .custom-pin-wrap {
+      position: relative;
+      width: 32px;
+      height: 38px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .custom-pin-wrap:hover {
+      transform: scale(1.2) translateY(-3px);
+      z-index: 9000 !important;
+    }
+
+    .custom-pin-body {
+      width: 28px;
+      height: 28px;
+      border-radius: 50% 50% 50% 0;
+      transform: rotate(-45deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #ffffff;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.38);
+    }
+
+    .custom-pin-body i {
+      transform: rotate(45deg);
+      color: #ffffff;
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    /* Centroid Approximate Coordinate Pin Style (Dashed Ring) */
+    .custom-pin-body.is-centroid {
+      border-radius: 50% !important;
+      transform: none !important;
+      border: 2px dashed #ffffff;
+      box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.5), 0 3px 8px rgba(0, 0, 0, 0.35);
+    }
+
+    .custom-pin-body.is-centroid i {
+      transform: none;
+    }
+
+    /* LED Logo Pin & Monochrome Styling */
+    .custom-pin-body.is-logo {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      transform: none;
+      background: #ffffff !important;
+      border: 2px solid #ffffff;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+      padding: 2px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .custom-pin-body.is-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      pointer-events: none;
+    }
+
+    .custom-pin-body.is-sold.is-logo {
+      filter: grayscale(100%);
+      opacity: 0.92;
+      border-color: #94a3b8;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    }
+
+    .custom-pin-body.is-sold:not(.is-logo) {
+      filter: grayscale(100%);
+      opacity: 0.88;
+      border-color: #cbd5e1;
+    }
+
+    /* Unit / Lot Count Pill on Multi-Property Pin */
+    .pin-count-badge {
+      position: absolute;
+      top: -6px;
+      right: -10px;
+      background: #0f172a;
+      color: #ffffff;
+      border: 1.5px solid #ffffff;
+      border-radius: 999px;
+      padding: 1px 5px;
+      font-size: 10px;
+      font-weight: 700;
+      font-family: 'Inter', 'Sarabun', sans-serif;
+      line-height: 1.2;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+      white-space: nowrap;
+      z-index: 3;
+    }
+
+    .pin-count-badge.centroid-badge {
+      background: #7c3aed;
+    }
+
+    .pin-count-badge.combo-badge {
+      background: #0f172a;
+      border: 1.5px solid #38bdf8;
+      color: #ffffff;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 9.5px;
+      padding: 1px 6px;
+    }
+
+    .pin-count-badge.sold-badge {
+      background: #475569;
+      border: 1.5px solid #94a3b8;
+    }
+
+    /* Bounce Animation when clicking a Pin or Popup */
+    @keyframes pinClickBounce {
+      0% { transform: scale(1) translateY(0); }
+      30% { transform: scale(1.35) translateY(-10px); }
+      60% { transform: scale(0.92) translateY(0); }
+      80% { transform: scale(1.12) translateY(-4px); }
+      100% { transform: scale(1) translateY(0); }
+    }
+
+    .pin-bouncing {
+      animation: pinClickBounce 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes popupSpringBounce {
+      0% {
+        opacity: 0;
+        transform: scale(0.55) translateY(18px);
+      }
+      65% {
+        opacity: 1;
+        transform: scale(1.05) translateY(-3px);
+      }
+      85% {
+        transform: scale(0.98) translateY(1px);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .leaflet-popup.bouncy-map-popup .leaflet-popup-content-wrapper {
+      background: var(--bg-panel);
+      color: var(--text-primary);
+      border: 1.5px solid var(--accent-blue);
+      border-radius: 14px;
+      box-shadow: 0 14px 34px rgba(15, 23, 42, 0.35);
+      padding: 2px;
+      animation: popupSpringBounce 0.38s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+      transform-origin: bottom center;
+    }
+
+    .leaflet-popup.bouncy-map-popup .leaflet-popup-tip {
+      background: var(--bg-panel);
+      border: 1px solid var(--accent-blue);
+    }
+
+    .leaflet-popup.bouncy-map-popup .leaflet-popup-content {
+      margin: 10px 12px;
+      font-family: 'Sarabun', 'Inter', sans-serif;
+      line-height: 1.45;
+    }
+
+    /* GIS Administrative Boundary Tooltip */
+    .boundary-tooltip {
+      background: var(--bg-panel);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
+      font-family: 'Prompt', 'Sarabun', sans-serif;
+      padding: 8px 12px;
+      font-size: 12px;
+      line-height: 1.45;
+      pointer-events: none;
+      backdrop-filter: blur(10px);
+    }
+    .boundary-tooltip:before {
+      display: none;
+    }
+
+    /* Bottom Zone Property Drawer on Map (Docked neatly beside Right Sidebar) */
     .bottom-zone-drawer {
       position: absolute;
       bottom: 16px;
-      left: 392px;
-      right: 446px;
-      height: 295px;
+      left: 16px;
+      right: 436px; /* Does NOT invade right sidebar */
+      height: 330px;
       background: var(--bg-panel);
-      backdrop-filter: blur(16px);
+      backdrop-filter: blur(18px);
       border: 1px solid var(--border-color);
       border-radius: 14px;
-      z-index: 1001;
+      z-index: 1002;
       box-shadow: var(--panel-shadow);
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      transform: translateY(340px);
+      transform: translateY(370px);
       opacity: 0;
       pointer-events: none;
-      transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease, height 0.25s ease, left 0.25s ease, right 0.25s ease;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease, height 0.25s ease, right 0.28s ease;
     }
 
     .bottom-zone-drawer.open {
@@ -853,13 +1279,31 @@
     }
 
     .bottom-zone-drawer.expanded {
-      height: 52vh;
+      height: 55vh;
     }
 
-    @media (max-width: 1400px) {
+    /* When Right Sidebar is collapsed, expand drawer and legend to full width */
+    .right-sidebar.collapsed ~ .bottom-zone-drawer {
+      right: 16px;
+    }
+
+    .right-sidebar.collapsed ~ .mini-legend-bar {
+      right: 16px;
+    }
+
+    /* Mini Legend lifts up cleanly above drawer when drawer is open */
+    #mapWrapper.drawer-open .mini-legend-bar {
+      bottom: calc(330px + 26px);
+    }
+
+    #mapWrapper.drawer-open.drawer-expanded .mini-legend-bar {
+      bottom: calc(55vh + 26px);
+    }
+
+    @media (max-width: 1200px) {
       .bottom-zone-drawer {
-        left: 16px;
         right: 16px;
+        left: 16px;
         z-index: 1005;
       }
     }
@@ -1450,114 +1894,129 @@
     <div class="map-wrapper" id="mapWrapper">
       <div id="gisMap"></div>
 
-      <!-- Left Floating Control Panel -->
-      <div class="map-panel" id="mapControlPanel">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-          <div>
-            <div style="font-size:15px; font-weight:700; display:flex; align-items:center; gap:6px;">
-              <i class="ri-compass-3-line" style="color:var(--accent-blue);"></i> แผงควบคุมแผนที่ GIS
-            </div>
-            <div style="font-size:11.5px; color:var(--text-secondary);" id="mapStatusText">กำลังแสดงข้อมูลพิกัดทรัพย์...</div>
+      <!-- FLOATING GIS PILL BAR (TOP-LEFT 2 ROWS - ULTRA SLEEK & ERGONOMIC) -->
+      <div class="gis-pill-bar" id="gisPillBar">
+        <!-- ROW 1: PRIMARY FILTERS -->
+        <div class="pill-row">
+          <!-- Mode Select -->
+          <div class="pill-select-wrap">
+            <i class="ri-layer-line pill-icon"></i>
+            <select class="pill-select" id="mapModeSelect" onchange="setMapMode(this.value)">
+              <option value="sold">ขายจบแล้ว (ก.ย.-ต.ค.)</option>
+              <option value="deals">Top 3,000 น่าลงทุน</option>
+              <option value="prov_npa">ทรัพย์รอขายรายจังหวัด</option>
+              <option value="combined_prov">รวม: ขายได้ + รอขาย (ตามจังหวัด)</option>
+              <option value="combined_deals">รวม: ขายได้ + Top 3,000 น่าลงทุน</option>
+            </select>
           </div>
-          <button class="btn btn-outline btn-sm" onclick="toggleTrueFullscreen()" title="ขยายเต็มจอ 100%">
-            <i class="ri-fullscreen-line"></i> เต็มจอ
-          </button>
-        </div>
 
-        <div class="form-label">1. เลือกโหมดชั้นข้อมูล (Map Layers)</div>
-        <div class="layer-grid">
-          <button class="layer-btn active" id="btnLayerSold" onclick="setMapMode('sold')">
-            <i class="ri-checkbox-circle-fill" style="color:var(--accent-emerald);"></i> ทรัพย์ขายจบแล้ว
-          </button>
-          <button class="layer-btn" id="btnLayerDeals" onclick="setMapMode('deals')">
-            <i class="ri-star-smile-fill" style="color:var(--accent-amber);"></i> Top 3,000 น่าลงทุน
-          </button>
-          <button class="layer-btn" id="btnLayerProvNpa" onclick="setMapMode('prov_npa')">
-            <i class="ri-map-pin-2-fill" style="color:var(--accent-blue);"></i> ทรัพย์รอขายรายจังหวัด
-          </button>
-          <button class="layer-btn active" id="btnLayerZoneBadges" onclick="toggleZoneBubbles()">
-            <i class="ri-bubble-chart-fill" style="color:var(--accent-purple);"></i> ป้ายสรุปโซน (% / ฿)
-          </button>
-        </div>
-        <div style="margin-bottom:12px;">
-          <button class="layer-btn" id="btnLayerHeat" onclick="toggleHeatmap()" style="width:100%; justify-content:center;">
-            <i class="ri-fire-fill" style="color:var(--accent-rose);"></i> เปิด/ปิด Heatmap ความหนาแน่นตลาด
-          </button>
-        </div>
+          <!-- Province Select -->
+          <div class="pill-select-wrap">
+            <i class="ri-map-pin-line pill-icon"></i>
+            <select class="pill-select" id="mapProvSelect" onchange="onMapFilterChange(true)">
+              <option value="ALL">ทุกจังหวัด (77 จว.)</option>
+            </select>
+          </div>
 
-        <div class="form-group">
-          <label class="form-label">2. เลือกจังหวัด (ซูมเข้าวิเคราะห์รายอำเภอ/ตำบล)</label>
-          <select class="form-select" id="mapProvSelect" onchange="onMapFilterChange(true)">
-            <option value="ALL">-- ทั้งประเทศ (77 จังหวัด) --</option>
-          </select>
-        </div>
-
-        <div class="grid-2" style="gap:8px; margin-bottom:0;">
-          <div class="form-group">
-            <label class="form-label">ประเภททรัพย์</label>
-            <select class="form-select" id="mapPropType" onchange="onMapFilterChange(false)">
-              <option value="ALL">ทั้งหมด</option>
-              <option value="ที่ดินพร้อมสิ่งปลูกสร้าง">บ้าน/ที่ดินพร้อมสิ่งปลูกสร้าง</option>
+          <!-- Property Type Select -->
+          <div class="pill-select-wrap">
+            <i class="ri-home-4-line pill-icon"></i>
+            <select class="pill-select" id="mapPropType" onchange="onMapFilterChange(false)">
+              <option value="ALL">ทรัพย์ทุกประเภท</option>
+              <option value="ที่ดินพร้อมสิ่งปลูกสร้าง">บ้าน/สิ่งปลูกสร้าง</option>
               <option value="ที่ดินว่างเปล่า">ที่ดินว่างเปล่า</option>
               <option value="ห้องชุด">ห้องชุด (คอนโด)</option>
               <option value="สิ่งปลูกสร้าง">สิ่งปลูกสร้าง</option>
             </select>
           </div>
-          <div class="form-group">
-            <label class="form-label">เงื่อนไขการขาย</label>
-            <select class="form-select" id="mapSaleType" onchange="onMapFilterChange(false)">
-              <option value="ALL">ทั้งหมด</option>
+
+          <!-- Max Budget Select -->
+          <div class="pill-select-wrap">
+            <i class="ri-money-dollar-circle-line pill-icon"></i>
+            <select class="pill-select" id="mapMaxPrice" onchange="onMapFilterChange(false)">
+              <option value="0">งบประเมิน: ไม่จำกัด</option>
+              <option value="500000">ไม่เกิน 5 แสน</option>
+              <option value="1000000">ไม่เกิน 1 ล้าน</option>
+              <option value="2000000">ไม่เกิน 2 ล้าน</option>
+              <option value="5000000">ไม่เกิน 5 ล้าน</option>
+              <option value="10000000">ไม่เกิน 10 ล้าน</option>
+            </select>
+          </div>
+
+          <!-- Fullscreen Button -->
+          <button class="pill-btn" onclick="toggleTrueFullscreen()" title="ขยายแผนที่เต็มหน้าจอ 100%">
+            <i class="ri-fullscreen-line"></i>
+          </button>
+        </div>
+
+        <!-- ROW 2: ACTIONS, TOGGLES & STATUS -->
+        <div class="pill-row">
+          <!-- Sale Condition Select -->
+          <div class="pill-select-wrap">
+            <i class="ri-shield-check-line pill-icon"></i>
+            <select class="pill-select" id="mapSaleType" onchange="onMapFilterChange(false)">
+              <option value="ALL">เงื่อนไข: ทั้งหมด</option>
               <option value="ปลอดการจำนอง">ปลอดการจำนอง</option>
               <option value="ไม่มีภาระจำนอง">ไม่มีภาระจำนอง</option>
               <option value="ปลอดภาระผูกพัน">ปลอดภาระผูกพัน</option>
               <option value="การจำนองติดไป">การจำนองติดไป</option>
             </select>
           </div>
-        </div>
 
-        <div class="grid-2" style="gap:8px; margin-bottom:0;">
-          <div class="form-group">
-            <label class="form-label">งบราคาประเมินสูงสุด</label>
-            <select class="form-select" id="mapMaxPrice" onchange="onMapFilterChange(false)">
-              <option value="0">ไม่จำกัดราคา</option>
-              <option value="500000">ไม่เกิน 5 แสนบาท</option>
-              <option value="1000000">ไม่เกิน 1 ล้านบาท</option>
-              <option value="2000000">ไม่เกิน 2 ล้านบาท</option>
-              <option value="5000000">ไม่เกิน 5 ล้านบาท</option>
-              <option value="10000000">ไม่เกิน 10 ล้านบาท</option>
+          <!-- Pin Style Select: ประเภททรัพย์ vs โลโก้ LED -->
+          <div class="pill-select-wrap">
+            <i class="ri-paint-brush-line pill-icon"></i>
+            <select class="pill-select" id="mapPinStyle" onchange="onPinStyleChange(this.value)" title="เลือกรูปแบบหมุด: ประเภททรัพย์ หรือ โลโก้ LED">
+              <option value="prop">หมุด: ประเภททรัพย์</option>
+              <option value="logo">หมุด: โลโก้ LED</option>
             </select>
           </div>
-          <div class="form-group">
-            <label class="form-label">การแสดงผลจุด</label>
-            <select class="form-select" id="mapRenderStyle" onchange="onMapFilterChange(false)">
-              <option value="cluster">จัดกลุ่ม (Cluster)</option>
-              <option value="canvas">จุดสีทั้งหมด (Canvas)</option>
-            </select>
-          </div>
-        </div>
 
-        <div style="display:flex; gap:8px; margin-top:6px;">
-          <button class="btn btn-emerald" style="flex:1;" onclick="exportVisibleMapPointsCSV()">
-            <i class="ri-download-2-line"></i> Export ขอบเขตแผนที่ (CSV)
+          <!-- Hide Centroids Button -->
+          <button class="pill-btn" id="btnHideCentroids" onclick="toggleHideCentroids()" title="ซ่อน/แสดง จุดที่มีการปักซ้ำกันที่พิกัดกึ่งกลางตำบล">
+            <i class="ri-focus-3-line"></i> ซ่อนกึ่งกลาง
           </button>
-          <button class="btn btn-outline" onclick="resetMapView()">
+
+          <!-- Zone Badges Toggle Button -->
+          <button class="pill-btn active" id="btnLayerZoneBadges" onclick="toggleZoneBubbles()" title="เปิด/ปิด ป้ายสรุปโซนลอยบนแผนที่">
+            <i class="ri-bubble-chart-line"></i> ป้ายโซน
+          </button>
+
+          <!-- District/Subdistrict Boundaries Toggle Button -->
+          <button class="pill-btn active" id="btnLayerBoundaries" onclick="toggleBoundaries()" title="เปิด/ปิด เส้นกรอบขอบเขต อำเภอ/ตำบล (ซูมลึกเพื่อดูตำบล)">
+            <i class="ri-shape-line"></i> กรอบอำเภอ/ตำบล
+          </button>
+
+          <!-- Heatmap Toggle Button -->
+          <button class="pill-btn" id="btnLayerHeat" onclick="toggleHeatmap()" title="เปิด/ปิด Heatmap ความหนาแน่น">
+            <i class="ri-fire-line"></i> Heatmap
+          </button>
+
+          <!-- Render Style Select -->
+          <div class="pill-select-wrap">
+            <i class="ri-node-tree pill-icon"></i>
+            <select class="pill-select" id="mapRenderStyle" onchange="onMapFilterChange(false)">
+              <option value="cluster">จัดกลุ่ม (Cluster)</option>
+              <option value="canvas">แสดงทุกหมุด (Canvas)</option>
+            </select>
+          </div>
+
+          <!-- Export CSV Button -->
+          <button class="pill-btn" onclick="exportVisibleMapPointsCSV()" title="Export พิกัดทรัพย์ในกรอบแผนที่เป็น CSV">
+            <i class="ri-download-2-line"></i> Export
+          </button>
+
+          <!-- Reset Button -->
+          <button class="pill-btn" onclick="resetMapView()" title="รีเซ็ตมุมมองกลับมาทั้งประเทศ">
             <i class="ri-refresh-line"></i> รีเซ็ต
           </button>
-        </div>
 
-        <!-- Dynamic Legend -->
-        <div class="legend-list" id="mapLegend">
-          <div style="font-weight:700; color:var(--text-primary); margin-bottom:2px;">สัญลักษณ์สี (โหมดทรัพย์ขายจบแล้ว):</div>
-          <div class="legend-item"><span class="dot" style="background:#10b981;"></span> ซื้อได้ถูกมาก (&lt; 80% ของราคาประเมิน / นัด 3–4)</div>
-          <div class="legend-item"><span class="dot" style="background:#3b82f6;"></span> ซื้อได้ต่ำกว่าประเมิน (80% – 99.9% / นัด 2)</div>
-          <div class="legend-item"><span class="dot" style="background:#f59e0b;"></span> ใกล้ราคาประเมิน (100% – 115% / นัด 1)</div>
-          <div class="legend-item"><span class="dot" style="background:#ef4444;"></span> แข่งราคาดุเดือด (&gt; 115% ของราคาประเมิน)</div>
+          <!-- Map Status Indicator -->
+          <div class="pill-status" id="mapStatusText">
+            กำลังแสดงข้อมูลพิกัดทรัพย์...
+          </div>
         </div>
       </div>
-
-      <button class="map-panel-toggle" onclick="toggleMapPanel()">
-        <i class="ri-side-bar-line"></i> แผงตัวกรอง
-      </button>
 
       <!-- =================================================================
            RIGHT SPATIAL INTELLIGENCE SIDEBAR (KPIs + ZONES + INSPECTOR)
@@ -1630,13 +2089,33 @@
 
         <!-- VIEW 2: SINGLE PROPERTY INSPECTOR & 4-ROUND SIMULATOR -->
         <div id="rsInspectorView" style="display:none; flex-direction:column; height:100%; overflow:hidden;">
-          <div class="rs-header" style="display:flex; justify-content:space-between; align-items:center;">
-            <button class="btn btn-outline btn-sm" onclick="closeInspector()">
-              <i class="ri-arrow-left-line"></i> กลับหน้าสรุปโซน
-            </button>
-            <span class="badge badge-blue" id="inspBadgeMode">รายละเอียดทรัพย์</span>
+          <div class="rs-header">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <button class="btn btn-outline btn-sm" onclick="closeInspector()">
+                <i class="ri-arrow-left-line"></i> กลับหน้าสรุปโซน
+              </button>
+              <span class="badge badge-blue" id="inspBadgeMode">รายละเอียดทรัพย์</span>
+            </div>
+
+            <!-- Unit / Stacked Property Navigator (Buttons + Progress) -->
+            <div id="inspNavRow" style="display:none; align-items:center; justify-content:space-between; gap:6px; background:var(--bg-subtle); padding:6px 10px; border-radius:8px; border:1px solid var(--border-color); margin-bottom:6px;">
+              <button class="btn btn-outline btn-sm" id="btnInspPrev" onclick="stepInspectorProperty(-1)" title="ดูทรัพย์ก่อนหน้า">
+                <i class="ri-arrow-left-s-line"></i> ก่อนหน้า
+              </button>
+              <div style="text-align:center; flex:1;">
+                <div style="font-size:12.5px; font-weight:700; color:var(--text-primary);" id="inspNavIndicator">รายการที่ 1/N</div>
+                <div style="font-size:11px; color:var(--text-secondary);" id="inspNavSub">พิกัดเดียวกัน</div>
+              </div>
+              <button class="btn btn-primary btn-sm" id="btnInspNext" onclick="stepInspectorProperty(1)" title="ดูทรัพย์ถัดไป">
+                ถัดไป <i class="ri-arrow-right-s-line"></i>
+              </button>
+            </div>
+
+            <!-- Horizontal Scrollable Unit Chips -->
+            <div id="inspChipsRow" class="insp-chips-scroll" style="display:none;"></div>
           </div>
-          <div class="rs-body">
+
+          <div class="rs-body" id="inspBodyWrapper">
             <h3 style="font-size:15.5px; margin-bottom:10px; color:var(--text-primary);" id="inspTitle">-</h3>
             <div id="inspBody"></div>
           </div>
@@ -1646,6 +2125,22 @@
       <button class="right-sidebar-toggle" onclick="toggleRightSidebar()">
         <i class="ri-bar-chart-box-line"></i> สรุปโซน/ราคา
       </button>
+
+      <!-- MINI HORIZONTAL LEGEND BAR (BOTTOM-RIGHT - CLEAN & DOCKED) -->
+      <div class="mini-legend-bar" id="miniLegendBar">
+        <div style="font-weight:700; color:var(--text-primary); display:flex; align-items:center; gap:4px; flex-shrink:0;">
+          <i class="ri-information-line" style="color:var(--accent-blue);"></i> สัญลักษณ์:
+        </div>
+        <div class="legend-chip"><span class="dot" style="background:#10b981;"></span> &gt;115% แข่งขันสูง</div>
+        <div class="legend-chip"><span class="dot" style="background:#06b6d4;"></span> 100-115% เกินประเมิน</div>
+        <div class="legend-chip"><span class="dot" style="background:#f59e0b;"></span> 80-99% ต่ำกว่าประเมิน</div>
+        <div class="legend-chip"><span class="dot" style="background:#ef4444;"></span> &lt;80% คนไม่แย่ง</div>
+        <span style="opacity:0.35;">|</span>
+        <div class="legend-chip"><i class="ri-home-4-fill" style="color:var(--accent-blue);"></i> บ้าน</div>
+        <div class="legend-chip"><i class="ri-building-4-fill" style="color:var(--accent-purple);"></i> คอนโด</div>
+        <div class="legend-chip"><i class="ri-landscape-fill" style="color:var(--accent-emerald);"></i> ที่ดิน</div>
+        <div class="legend-chip"><i class="ri-focus-3-line" style="color:var(--accent-amber);"></i> กึ่งกลาง</div>
+      </div>
 
       <!-- =================================================================
            BOTTOM ZONE PROPERTY DRAWER (SLIDES UP WHEN CLICKING A ZONE)
@@ -1967,6 +2462,7 @@
     // GLOBAL STATE & THEME MANAGEMENT (LIGHT BY DEFAULT)
     // =========================================================================
     window.LED_PROV_DATA = window.LED_PROV_DATA || {};
+    window.LED_BOUNDARIES = window.LED_BOUNDARIES || {};
     let currentTheme = 'light'; // default light theme
     let chartInstances = [];
 
@@ -1978,11 +2474,18 @@
     let clusterGroup = null;
     let canvasLayerGroup = null;
     let zoneBubbleLayerGroup = null;
+    let boundaryLayerGroup = null;
     let heatLayer = null;
     let isHeatVisible = false;
     let isZoneBubblesVisible = true;
-    let currentMapMode = 'sold'; // 'sold' | 'deals' | 'prov_npa'
+    let isBoundariesVisible = true;
+    let hideCentroids = false;
+    let currentMapMode = 'sold'; // 'sold' | 'deals' | 'prov_npa' | 'combined_prov' | 'combined_deals'
+    let currentPinStyle = 'prop'; // 'prop' | 'logo'
     let currentlyRenderedPoints = [];
+    let currentCoordGroupsMap = new Map();
+    let activePopupGroupKey = '';
+    let activePopupUnitIdx = 0;
 
     // Spatial Zone Intelligence State
     let comparisonUnit = 'pct'; // 'pct' | 'baht'
@@ -2022,6 +2525,117 @@
       if (!n || isNaN(n)) return '0.0';
       return (Number(n) / 1e6).toLocaleString('th-TH', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
     };
+
+    // =========================================================================
+    // LED AUCTION REPORT BRIDGE UTILITIES
+    // =========================================================================
+    function parseRedCase(caseStr) {
+      if (!caseStr) return { suitNo: '', suitYear: '' };
+      let clean = String(caseStr).split('_')[0].trim();
+      if (clean.includes('/')) {
+        const parts = clean.split('/');
+        const suitNo = parts[0].trim();
+        const ym = parts[1].match(/\d{4}/);
+        const suitYear = ym ? ym[0] : parts[1].trim();
+        return { suitNo, suitYear };
+      }
+      return { suitNo: clean, suitYear: '' };
+    }
+
+    function makeLedBridgeUrl(caseStr, court = '', isSold = true) {
+      const { suitNo, suitYear } = parseRedCase(caseStr);
+      const modeParam = isSold ? 'sold' : 'npa';
+      let url = `app/static/led_bridge.html?mode=${modeParam}&suit_no=${encodeURIComponent(suitNo)}&suit_year=${encodeURIComponent(suitYear)}`;
+      if (!isSold && court && court !== '-') {
+        url += `&court=${encodeURIComponent(court)}`;
+      }
+      return url;
+    }
+
+    function showBridgeToast(msg) {
+      let toast = document.getElementById('bridgeToast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'bridgeToast';
+        toast.style.position = 'fixed';
+        toast.style.bottom = '24px';
+        toast.style.left = '50%';
+        toast.style.transform = 'translateX(-50%) translateY(100px)';
+        toast.style.background = 'rgba(15, 23, 42, 0.95)';
+        toast.style.border = '1px solid rgba(59, 130, 246, 0.4)';
+        toast.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.5), 0 0 15px rgba(59, 130, 246, 0.3)';
+        toast.style.color = '#f8fafc';
+        toast.style.padding = '12px 22px';
+        toast.style.borderRadius = '30px';
+        toast.style.fontSize = '13.5px';
+        toast.style.fontWeight = '500';
+        toast.style.display = 'flex';
+        toast.style.alignItems = 'center';
+        toast.style.gap = '8px';
+        toast.style.zIndex = '99999';
+        toast.style.transition = 'all 0.35s cubic-bezier(0.16, 1, 0.3, 1)';
+        toast.style.pointerEvents = 'none';
+        document.body.appendChild(toast);
+      }
+      toast.innerHTML = `<i class="ri-government-line" style="color:#60a5fa; font-size:16px;"></i> <span>${msg}</span>`;
+      toast.style.opacity = '1';
+      toast.style.transform = 'translateX(-50%) translateY(0)';
+      clearTimeout(toast._hideTimer);
+      toast._hideTimer = setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(-50%) translateY(100px)';
+      }, 3200);
+    }
+
+    function openLedReportBridge(caseStr, court = '', isSold = true, person1 = '') {
+      const { suitNo, suitYear } = parseRedCase(caseStr);
+      if (!suitNo && !suitYear) {
+        alert('ไม่พบหมายเลขคดีแดงของทรัพย์นี้');
+        return;
+      }
+
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.target = '_blank';
+      form.acceptCharset = 'utf-8';
+      form.style.display = 'none';
+
+      const addInput = (name, val) => {
+        const inp = document.createElement('input');
+        inp.type = 'hidden';
+        inp.name = name;
+        inp.value = val || '';
+        form.appendChild(inp);
+      };
+
+      if (isSold) {
+        // Mode Sold -> asset.led.go.th/report/reports.asp
+        form.action = 'https://asset.led.go.th/report/reports.asp';
+        addInput('ALAW_SUIT_NO', suitNo);
+        addInput('ALAW_SUIT_YEAR', suitYear);
+        addInput('person1', person1 || '');
+        addInput('startdate', '');
+        addInput('Action', 'ค้นหา');
+        showBridgeToast(`เปิดรายงานผลขาย LED: คดี ${suitNo}${suitYear ? '/' + suitYear : ''}`);
+      } else {
+        // Mode NPA (รอการขาย) -> asset.led.go.th/newbidreg/asset_search_law_suit.asp
+        form.action = 'https://asset.led.go.th/newbidreg/asset_search_law_suit.asp';
+        addInput('search_law_suit_no', suitNo);
+        addInput('search_law_suit_year', suitYear);
+        addInput('search_law_court_name', (court && court !== '-') ? court : '');
+        addInput('search_owner_suit_name', '');
+        addInput('search_person1', person1 || '');
+        addInput('search', 'ok');
+        const courtLabel = (court && court !== '-') ? ` (${court})` : '';
+        showBridgeToast(`เปิดค้นหาประกาศขาย LED: คดี ${suitNo}${suitYear ? '/' + suitYear : ''}${courtLabel}`);
+      }
+
+      document.body.appendChild(form);
+      form.submit();
+      setTimeout(() => {
+        if (form.parentNode) form.parentNode.removeChild(form);
+      }, 1500);
+    }
 
     function getThemeColors() {
       const isDark = currentTheme === 'dark';
@@ -2110,6 +2724,22 @@
         script.src = `data/provinces/${pCode}.js`;
         script.onload = () => resolve(window.LED_PROV_DATA[provName] || []);
         script.onerror = () => resolve([]);
+        document.body.appendChild(script);
+      });
+    }
+
+    // Dynamic script loader for per-province boundary chunks (works offline on file://)
+    function loadBoundaryChunk(provName) {
+      return new Promise((resolve) => {
+        const pCode = window.LED_SUMMARY?.prov_file_map?.[provName];
+        if (!pCode) return resolve(null);
+        if (window.LED_BOUNDARIES && window.LED_BOUNDARIES[pCode]) {
+          return resolve(window.LED_BOUNDARIES[pCode]);
+        }
+        const script = document.createElement('script');
+        script.src = `data/boundaries/${pCode}.js`;
+        script.onload = () => resolve((window.LED_BOUNDARIES && window.LED_BOUNDARIES[pCode]) || null);
+        script.onerror = () => resolve(null);
         document.body.appendChild(script);
       });
     }
@@ -2549,15 +3179,6 @@
         lightTileLayer.addTo(mapInstance);
       }
 
-      L.control.layers({
-        "แผนที่ถนนภาษาไทย (Google Maps)": lightTileLayer,
-        "แผนที่ดาวเทียม+ชื่อถนน (Google Hybrid)": googleHybridLayer,
-        "แผนที่ถนนสากล (Esri Street Map)": esriStreetLayer,
-        "แผนที่สีเทาสว่าง (Esri Light GIS)": esriLightGrayLayer,
-        "แผนที่โทนมืด (Esri Dark GIS)": darkTileLayer,
-        "ภาพถ่ายดาวเทียมล้วน (Esri Satellite)": satTileLayer
-      }, null, { position: 'bottomright' }).addTo(mapInstance);
-
       clusterGroup = L.markerClusterGroup({
         chunkedLoading: true,
         maxClusterRadius: 48,
@@ -2565,20 +3186,58 @@
       });
       canvasLayerGroup = L.layerGroup();
       zoneBubbleLayerGroup = L.layerGroup();
+      boundaryLayerGroup = L.layerGroup();
+
+      L.control.layers({
+        "แผนที่ถนนภาษาไทย (Google Maps)": lightTileLayer,
+        "แผนที่ดาวเทียม+ชื่อถนน (Google Hybrid)": googleHybridLayer,
+        "แผนที่ถนนสากล (Esri Street Map)": esriStreetLayer,
+        "แผนที่สีเทาสว่าง (Esri Light GIS)": esriLightGrayLayer,
+        "แผนที่โทนมืด (Esri Dark GIS)": darkTileLayer,
+        "ภาพถ่ายดาวเทียมล้วน (Esri Satellite)": satTileLayer
+      }, {
+        "กรอบอำเภอ/ตำบล (GeoJSON)": boundaryLayerGroup,
+        "ป้ายสรุปโซน (Zone Badges)": zoneBubbleLayerGroup
+      }, { position: 'bottomright' }).addTo(mapInstance);
 
       mapInstance.addLayer(clusterGroup);
       mapInstance.addLayer(zoneBubbleLayerGroup);
+      mapInstance.addLayer(boundaryLayerGroup);
 
-      // Update spatial intelligence sidebar & zone bubbles whenever user pans or zooms
+      // Listen to Leaflet overlay add/remove to sync toolbar button
+      mapInstance.on('overlayadd', (e) => {
+        if (e.name && e.name.includes('กรอบอำเภอ/ตำบล')) {
+          isBoundariesVisible = true;
+          const btn = document.getElementById('btnLayerBoundaries');
+          if (btn) btn.classList.add('active');
+          if (boundaryLayerGroup) boundaryLayerGroup._currentKey = null;
+          updateBoundaryLayer();
+        }
+      });
+      mapInstance.on('overlayremove', (e) => {
+        if (e.name && e.name.includes('กรอบอำเภอ/ตำบล')) {
+          isBoundariesVisible = false;
+          const btn = document.getElementById('btnLayerBoundaries');
+          if (btn) btn.classList.remove('active');
+        }
+      });
+
+      // Update spatial intelligence sidebar, zone bubbles, and administrative boundaries on move/zoom
       mapInstance.on('moveend', () => {
         updateRightSidebarAndZoneBadges();
+        updateBoundaryLayer();
+      });
+      mapInstance.on('zoomend', () => {
+        updateBoundaryLayer();
       });
 
       renderMapPoints();
+      updateMapLegend();
     }
 
     function toggleMapPanel() {
-      document.getElementById('mapControlPanel').classList.toggle('collapsed');
+      const p = document.getElementById('gisPillBar');
+      if (p) p.classList.toggle('collapsed');
     }
 
     function toggleRightSidebar() {
@@ -2589,6 +3248,7 @@
       isZoneBubblesVisible = !isZoneBubblesVisible;
       document.getElementById('btnLayerZoneBadges').classList.toggle('active', isZoneBubblesVisible);
       updateRightSidebarAndZoneBadges();
+      updateBoundaryLayer();
     }
 
     function setComparisonUnit(unit) {
@@ -2596,6 +3256,7 @@
       document.getElementById('btnUnitPct').classList.toggle('active', unit === 'pct');
       document.getElementById('btnUnitBaht').classList.toggle('active', unit === 'baht');
       updateRightSidebarAndZoneBadges();
+      updateBoundaryLayer();
     }
 
     function setZoneGranularity(level) {
@@ -2609,6 +3270,7 @@
       if (level === 'amphoe') document.getElementById('btnLevelAmp').classList.add('active');
       if (level === 'tambon') document.getElementById('btnLevelTam').classList.add('active');
       updateRightSidebarAndZoneBadges();
+      updateBoundaryLayer();
     }
 
     function setZoneRankMode(mode) {
@@ -2617,6 +3279,7 @@
       document.getElementById('btnRankDiscount').classList.toggle('active', mode === 'discount');
       document.getElementById('btnRankVolume').classList.toggle('active', mode === 'volume');
       updateRightSidebarAndZoneBadges();
+      updateBoundaryLayer();
     }
 
     function toggleTrueFullscreen() {
@@ -2628,58 +3291,407 @@
     }
 
     function resetMapView() {
+      const modeSel = document.getElementById('mapModeSelect');
+      if (modeSel) modeSel.value = 'sold';
+      currentMapMode = 'sold';
+      const pinSel = document.getElementById('mapPinStyle');
+      if (pinSel) pinSel.value = 'prop';
+      currentPinStyle = 'prop';
       document.getElementById('mapProvSelect').value = 'ALL';
       document.getElementById('mapPropType').value = 'ALL';
       document.getElementById('mapSaleType').value = 'ALL';
       document.getElementById('mapMaxPrice').value = '0';
       closeInspector();
+      closeBottomDrawer();
       if (mapInstance) mapInstance.setView([13.7563, 100.5018], 6);
+      updateMapLegend();
       renderMapPoints();
     }
 
     async function setMapMode(mode) {
       currentMapMode = mode;
-      ['btnLayerSold', 'btnLayerDeals', 'btnLayerProvNpa'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.classList.remove('active');
-      });
-      if (mode === 'sold') document.getElementById('btnLayerSold').classList.add('active');
-      if (mode === 'deals') document.getElementById('btnLayerDeals').classList.add('active');
-      if (mode === 'prov_npa') document.getElementById('btnLayerProvNpa').classList.add('active');
+      const sel = document.getElementById('mapModeSelect');
+      if (sel && sel.value !== mode) sel.value = mode;
 
-      if (mode === 'prov_npa' && document.getElementById('mapProvSelect').value === 'ALL') {
+      if ((mode === 'prov_npa' || mode === 'combined_prov') && document.getElementById('mapProvSelect').value === 'ALL') {
         document.getElementById('mapProvSelect').value = 'กรุงเทพมหานคร';
       }
 
       updateMapLegend();
-      await onMapFilterChange(mode === 'prov_npa');
+      await onMapFilterChange(mode === 'prov_npa' || mode === 'combined_prov');
+    }
+
+    function onPinStyleChange(style) {
+      currentPinStyle = style;
+      const sel = document.getElementById('mapPinStyle');
+      if (sel && sel.value !== style) sel.value = style;
+      updateMapLegend();
+      renderMapPoints();
     }
 
     function updateMapLegend() {
-      const leg = document.getElementById('mapLegend');
-      if (currentMapMode === 'sold') {
-        leg.innerHTML = `
-          <div style="font-weight:700; color:var(--text-primary); margin-bottom:2px;">สัญลักษณ์สี (ทรัพย์ขายจบแล้ว):</div>
-          <div class="legend-item"><span class="dot" style="background:#10b981;"></span> ซื้อได้ถูกมาก (&lt; 80% ของประเมิน / นัด 3–4)</div>
-          <div class="legend-item"><span class="dot" style="background:#3b82f6;"></span> ซื้อได้ต่ำกว่าประเมิน (80% – 99.9% / นัด 2)</div>
-          <div class="legend-item"><span class="dot" style="background:#f59e0b;"></span> ใกล้ราคาประเมิน (100% – 115% / นัด 1)</div>
-          <div class="legend-item"><span class="dot" style="background:#ef4444;"></span> แข่งราคาดุเดือด (&gt; 115% ของประเมิน)</div>
+      const leg = document.getElementById('miniLegendBar');
+      if (!leg) return;
+
+      const isLogo = (currentPinStyle === 'logo');
+      const isCombined = currentMapMode.startsWith('combined');
+      const isSoldOnly = (currentMapMode === 'sold');
+
+      let modeTitle = '';
+      let statusChips = '';
+      let styleChips = '';
+
+      if (isSoldOnly) {
+        modeTitle = `
+          <div style="font-weight:700; color:var(--text-primary); display:flex; align-items:center; gap:4px; flex-shrink:0;">
+            <i class="ri-checkbox-circle-fill" style="color:var(--status-emerald);"></i> ขายจบแล้ว:
+          </div>
+        `;
+        statusChips = `
+          <div class="legend-chip"><span class="dot" style="background:#10b981;"></span> &gt;115% แข่งขันสูง</div>
+          <div class="legend-chip"><span class="dot" style="background:#06b6d4;"></span> 100-115% เกินประเมิน</div>
+          <div class="legend-chip"><span class="dot" style="background:#f59e0b;"></span> 80-99% ต่ำกว่าประเมิน</div>
+          <div class="legend-chip"><span class="dot" style="background:#ef4444;"></span> &lt;80% คนไม่แย่ง</div>
+        `;
+      } else if (isCombined) {
+        modeTitle = `
+          <div style="font-weight:700; color:var(--text-primary); display:flex; align-items:center; gap:4px; flex-shrink:0;">
+            <i class="ri-stack-fill" style="color:var(--accent-blue);"></i> โหมดรวม:
+          </div>
+        `;
+        statusChips = `
+          <div class="legend-chip"><span class="dot" style="background:#10b981;"></span> ทรัพย์รอขาย (มีสี/เคาะได้)</div>
+          <div class="legend-chip"><span class="dot" style="background:#64748b;"></span> ประวัติขายจบแล้ว (ขาวดำ)</div>
         `;
       } else {
-        leg.innerHTML = `
-          <div style="font-weight:700; color:var(--text-primary); margin-bottom:2px;">สัญลักษณ์สี (คะแนนความคุ้มค่า Deal Score):</div>
-          <div class="legend-item"><span class="dot" style="background:#10b981;"></span> เกรด A+ คุ้มค่าสูงสุด (Deal Score ≥ 80)</div>
-          <div class="legend-item"><span class="dot" style="background:#3b82f6;"></span> เกรด A น่าสนใจมาก (Deal Score 70 – 79.9)</div>
-          <div class="legend-item"><span class="dot" style="background:#f59e0b;"></span> เกรด B ปานกลาง (Deal Score 55 – 69.9)</div>
-          <div class="legend-item"><span class="dot" style="background:#ef4444;"></span> เกรด C ระวังจำนองติดไป/ราคาสูง (&lt; 55)</div>
+        modeTitle = `
+          <div style="font-weight:700; color:var(--text-primary); display:flex; align-items:center; gap:4px; flex-shrink:0;">
+            <i class="ri-star-smile-fill" style="color:var(--accent-amber);"></i> Deal Score:
+          </div>
+        `;
+        statusChips = `
+          <div class="legend-chip"><span class="dot" style="background:#10b981;"></span> เกรด A+ (≥80)</div>
+          <div class="legend-chip"><span class="dot" style="background:#06b6d4;"></span> เกรด A (70-79)</div>
+          <div class="legend-chip"><span class="dot" style="background:#f59e0b;"></span> เกรด B (55-69)</div>
+          <div class="legend-chip"><span class="dot" style="background:#ef4444;"></span> เกรด C (&lt;55)</div>
         `;
       }
+
+      if (isLogo) {
+        styleChips = `
+          <div class="legend-chip" style="display:inline-flex; align-items:center; gap:4px;"><img src="Logo/led_pin.png" style="width:14px; height:14px; vertical-align:middle; object-fit:contain; border-radius:50%;" alt="LED Active" /> โลโก้สี: รอขาย</div>
+          <div class="legend-chip" style="display:inline-flex; align-items:center; gap:4px;"><img src="Logo/led_legal_pin.png" style="width:14px; height:14px; vertical-align:middle; object-fit:contain; border-radius:50%;" alt="LED Sold" /> โลโก้ขาวดำ: ขายจบแล้ว</div>
+          <div class="legend-chip"><i class="ri-focus-3-line" style="color:var(--accent-amber);"></i> กึ่งกลางตำบล</div>
+        `;
+      } else {
+        styleChips = `
+          <div class="legend-chip"><i class="ri-home-4-fill" style="color:var(--accent-blue);"></i> บ้าน</div>
+          <div class="legend-chip"><i class="ri-building-4-fill" style="color:var(--accent-purple);"></i> คอนโด</div>
+          <div class="legend-chip"><i class="ri-landscape-fill" style="color:var(--accent-emerald);"></i> ที่ดิน</div>
+          <div class="legend-chip"><i class="ri-focus-3-line" style="color:var(--accent-amber);"></i> กึ่งกลาง</div>
+        `;
+      }
+
+      leg.innerHTML = `${modeTitle}${statusChips}<span style="opacity:0.35;">|</span>${styleChips}`;
     }
 
     function toggleHeatmap() {
       isHeatVisible = !isHeatVisible;
       document.getElementById('btnLayerHeat').classList.toggle('active', isHeatVisible);
       renderMapPoints();
+    }
+
+    function toggleHideCentroids() {
+      hideCentroids = !hideCentroids;
+      document.getElementById('btnHideCentroids').classList.toggle('active', hideCentroids);
+      renderMapPoints();
+    }
+
+    // =========================================================================
+    // GIS ADMINISTRATIVE BOUNDARIES (AMPHOE & TAMBON ON-DEMAND CHUNKS)
+    // =========================================================================
+    function normName(s) {
+      if (!s) return '';
+      return String(s)
+        .replace(/^(อ\.|อำเภอ|เขต|ต\.|ตำบล|แขวง)/, '')
+        .replace(/\s+/g, '')
+        .trim();
+    }
+
+    function computeBoundaryStats(targetProv) {
+      const stats = { amp: {}, tam: {} };
+      if (!targetProv || targetProv === 'ALL') return stats;
+
+      const recordItem = (pt, isSold) => {
+        const tName = normName(pt[7]);
+        const aName = normName(pt[8]);
+        const app = pt[4] || 0;
+        const sold = isSold ? (pt[5] || 0) : 0;
+
+        if (aName) {
+          if (!stats.amp[aName]) {
+            stats.amp[aName] = { soldCount: 0, soldVal: 0, npaCount: 0, npaVal: 0, totalApp: 0, countApp: 0 };
+          }
+          const a = stats.amp[aName];
+          if (isSold) {
+            a.soldCount++;
+            a.soldVal += sold;
+          } else {
+            a.npaCount++;
+            a.npaVal += app;
+          }
+          if (app > 0) {
+            a.totalApp += app;
+            a.countApp++;
+          }
+        }
+
+        if (tName && aName) {
+          const tKey = `${tName}|${aName}`;
+          if (!stats.tam[tKey]) {
+            stats.tam[tKey] = { soldCount: 0, soldVal: 0, npaCount: 0, npaVal: 0, totalApp: 0, countApp: 0 };
+          }
+          const t = stats.tam[tKey];
+          if (isSold) {
+            t.soldCount++;
+            t.soldVal += sold;
+          } else {
+            t.npaCount++;
+            t.npaVal += app;
+          }
+          if (app > 0) {
+            t.totalApp += app;
+            t.countApp++;
+          }
+        }
+      };
+
+      const soldAll = window.LED_SOLD || [];
+      for (let i = 0; i < soldAll.length; i++) {
+        if (soldAll[i][9] === targetProv) {
+          recordItem(soldAll[i], true);
+        }
+      }
+
+      const npaProv = (window.LED_PROV_DATA && window.LED_PROV_DATA[targetProv]) || [];
+      for (let i = 0; i < npaProv.length; i++) {
+        recordItem(npaProv[i], false);
+      }
+
+      for (const k in stats.amp) {
+        const a = stats.amp[k];
+        a.avgAppraisal = a.countApp > 0 ? (a.totalApp / a.countApp) : 0;
+      }
+      for (const k in stats.tam) {
+        const t = stats.tam[k];
+        t.avgAppraisal = t.countApp > 0 ? (t.totalApp / t.countApp) : 0;
+      }
+
+      return stats;
+    }
+
+    async function updateBoundaryLayer() {
+      if (!mapInstance || !boundaryLayerGroup) return;
+      if (!isBoundariesVisible) {
+        boundaryLayerGroup.clearLayers();
+        boundaryLayerGroup._currentKey = null;
+        return;
+      }
+
+      const zoom = mapInstance.getZoom();
+      if (zoom < 8) {
+        boundaryLayerGroup.clearLayers();
+        boundaryLayerGroup._currentKey = null;
+        return;
+      }
+
+      const prov = document.getElementById('mapProvSelect')?.value || 'ALL';
+      let targetProv = prov;
+
+      if (prov === 'ALL') {
+        const bounds = mapInstance.getBounds();
+        const visiblePts = currentlyRenderedPoints.filter(pt => pt[10] && pt[11] && bounds.contains([pt[10], pt[11]]));
+        if (visiblePts.length > 0) {
+          const pCounts = {};
+          for (let i = 0; i < Math.min(visiblePts.length, 60); i++) {
+            const p = visiblePts[i][9];
+            if (p) pCounts[p] = (pCounts[p] || 0) + 1;
+          }
+          let maxC = 0;
+          for (const [p, c] of Object.entries(pCounts)) {
+            if (c > maxC) { maxC = c; targetProv = p; }
+          }
+        }
+      }
+
+      if (!targetProv || targetProv === 'ALL') {
+        boundaryLayerGroup.clearLayers();
+        boundaryLayerGroup._currentKey = null;
+        return;
+      }
+
+      let showTambon = (zoom >= 12);
+      if (zoneGranularity === 'tambon') showTambon = true;
+      if (zoneGranularity === 'amphoe') showTambon = false;
+      const cacheKey = `${targetProv}_${showTambon ? 'tam' : 'amp'}`;
+      if (boundaryLayerGroup._currentKey === cacheKey) {
+        return;
+      }
+
+      const bData = await loadBoundaryChunk(targetProv);
+      if (!bData) {
+        boundaryLayerGroup.clearLayers();
+        boundaryLayerGroup._currentKey = null;
+        return;
+      }
+
+      boundaryLayerGroup.clearLayers();
+      boundaryLayerGroup._currentKey = cacheKey;
+
+      const stats = computeBoundaryStats(targetProv);
+      const featureCollection = showTambon ? bData.tambon : bData.amphoe;
+      if (!featureCollection || !featureCollection.features || !featureCollection.features.length) return;
+
+      const defaultStyle = showTambon ? {
+        color: '#8b5cf6',
+        weight: 1.5,
+        dashArray: '3, 3',
+        fillColor: '#8b5cf6',
+        fillOpacity: 0.05
+      } : {
+        color: '#0284c7',
+        weight: 2,
+        dashArray: '5, 5',
+        fillColor: '#0284c7',
+        fillOpacity: 0.05
+      };
+
+      const geoLayer = L.geoJSON(featureCollection, {
+        style: () => ({ ...defaultStyle }),
+        onEachFeature: (feature, layer) => {
+          const props = feature.properties || {};
+          const name = props.name || '';
+          const ampName = showTambon ? (props.amp || '') : name;
+
+          let st = {};
+          const nName = normName(name);
+          const nAmp = normName(ampName);
+          if (showTambon) {
+            const tKey = `${nName}|${nAmp}`;
+            st = stats.tam[tKey] || {};
+            if (!st.soldCount && !st.npaCount) {
+              for (const k in stats.tam) {
+                if (k.startsWith(nName + '|') || (k.includes(nName) && k.includes(nAmp))) {
+                  st = stats.tam[k];
+                  break;
+                }
+              }
+            }
+          } else {
+            st = stats.amp[nName] || {};
+            if (!st.soldCount && !st.npaCount) {
+              for (const k in stats.amp) {
+                if (k.includes(nName) || nName.includes(k)) {
+                  st = stats.amp[k];
+                  break;
+                }
+              }
+            }
+          }
+
+          const title = showTambon ? `ต.${name} (อ.${ampName})` : `อ.${name}`;
+          const sub = `จ.${targetProv}`;
+
+          const tooltipContent = `
+            <div style="font-family:Prompt,sans-serif; min-width:175px; padding:2px;">
+              <div style="font-weight:700; font-size:12.5px; color:${showTambon ? '#8b5cf6' : '#0284c7'}; margin-bottom:3px; display:flex; align-items:center; gap:5px;">
+                <i class="${showTambon ? 'ri-map-pin-2-line' : 'ri-government-line'}"></i> ${title}
+              </div>
+              <div style="font-size:10.5px; color:var(--text-secondary); margin-bottom:5px;">${sub}</div>
+              <div style="font-size:11.5px; display:flex; justify-content:space-between; margin-bottom:3px;">
+                <span style="color:var(--text-secondary);">รอขาย (NPA):</span>
+                <span style="font-weight:600; color:#10b981;">${fmtNum(st.npaCount || 0)} แปลง</span>
+              </div>
+              <div style="font-size:11.5px; display:flex; justify-content:space-between; margin-bottom:3px;">
+                <span style="color:var(--text-secondary);">ขายได้แล้ว:</span>
+                <span style="font-weight:600; color:#0284c7;">${fmtNum(st.soldCount || 0)} แปลง</span>
+              </div>
+              ${st.avgAppraisal > 0 ? `
+                <div style="font-size:10.5px; color:#f59e0b; margin-top:4px; border-top:1px dashed var(--border-color); padding-top:3px;">
+                  ประเมินเฉลี่ย: ~${fmtMillions(st.avgAppraisal)} ลบ.
+                </div>` : ''}
+              <div style="font-size:10px; color:#94a3b8; margin-top:5px; border-top:1px solid rgba(148,163,184,0.2); padding-top:3px;">
+                <i class="ri-cursor-line"></i> คลิกเพื่อซูมและเปิดรายการทรัพย์
+              </div>
+            </div>
+          `;
+
+          layer.bindTooltip(tooltipContent, {
+            sticky: true,
+            className: 'boundary-tooltip',
+            direction: 'auto'
+          });
+
+          layer.on('mouseover', (e) => {
+            const l = e.target;
+            l.setStyle({
+              color: '#f59e0b',
+              weight: 3,
+              dashArray: '',
+              fillColor: '#f59e0b',
+              fillOpacity: 0.18
+            });
+            if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+              l.bringToFront();
+            }
+          });
+
+          layer.on('mouseout', (e) => {
+            geoLayer.resetStyle(e.target);
+          });
+
+          layer.on('click', () => {
+            mapInstance.fitBounds(layer.getBounds(), { padding: [30, 30], maxZoom: showTambon ? 15 : 13 });
+            const zKey = showTambon ? `${name}|${ampName}|${targetProv}` : `${name}|${targetProv}`;
+            const zObj = {
+              key: zKey,
+              name: showTambon ? `ต.${name}` : `อ.${name}`,
+              sub: showTambon ? `อ.${ampName} จ.${targetProv}` : `จ.${targetProv}`,
+              prov: targetProv,
+              lat: props.lat || layer.getBounds().getCenter().lat,
+              lon: props.lon || layer.getBounds().getCenter().lng
+            };
+            selectZoneAndOpenDrawer(zObj, showTambon ? 'tambon' : 'amphoe');
+          });
+        }
+      });
+
+      boundaryLayerGroup.addLayer(geoLayer);
+    }
+
+    function toggleBoundaries(forceVal) {
+      if (typeof forceVal === 'boolean') {
+        isBoundariesVisible = forceVal;
+      } else {
+        isBoundariesVisible = !isBoundariesVisible;
+      }
+      const btn = document.getElementById('btnLayerBoundaries');
+      if (btn) btn.classList.toggle('active', isBoundariesVisible);
+      if (boundaryLayerGroup) {
+        if (isBoundariesVisible) {
+          if (mapInstance && !mapInstance.hasLayer(boundaryLayerGroup)) {
+            mapInstance.addLayer(boundaryLayerGroup);
+          }
+          boundaryLayerGroup._currentKey = null;
+          updateBoundaryLayer();
+        } else {
+          boundaryLayerGroup.clearLayers();
+          boundaryLayerGroup._currentKey = null;
+          if (mapInstance && mapInstance.hasLayer(boundaryLayerGroup)) {
+            mapInstance.removeLayer(boundaryLayerGroup);
+          }
+        }
+      }
     }
 
     async function onMapFilterChange(zoomToProv = false) {
@@ -2690,23 +3702,34 @@
           mapInstance.flyTo([pInfo.lat, pInfo.lon], 10, { duration: 0.8 });
         }
       }
+      if (boundaryLayerGroup) boundaryLayerGroup._currentKey = null;
       await renderMapPoints();
     }
 
+    // Inverted color semantics for Sold properties:
+    // Green (#10b981) = High competition (>115%), Cyan (#06b6d4) = Above/at appraisal (100-115%),
+    // Amber (#f59e0b) = Slightly below (80-99.9%), Red (#ef4444) = Low competition (<80%)
     function getPointColor(item, isSold) {
       if (isSold) {
         const ratio = item[6];
-        if (ratio < 0.80) return '#10b981';
-        if (ratio < 1.00) return '#3b82f6';
-        if (ratio <= 1.15) return '#f59e0b';
+        if (ratio > 1.15) return '#10b981';
+        if (ratio >= 1.00) return '#06b6d4';
+        if (ratio >= 0.80) return '#f59e0b';
         return '#ef4444';
       } else {
         const score = item[5];
         if (score >= 80) return '#10b981';
-        if (score >= 70) return '#3b82f6';
+        if (score >= 70) return '#06b6d4';
         if (score >= 55) return '#f59e0b';
         return '#ef4444';
       }
+    }
+
+    function getPropIconClass(propType) {
+      if (propType === 'ห้องชุด') return 'ri-building-4-fill';
+      if (propType === 'ที่ดินว่างเปล่า') return 'ri-landscape-fill';
+      if (propType === 'สิ่งปลูกสร้าง') return 'ri-store-2-fill';
+      return 'ri-home-4-fill';
     }
 
     async function renderMapPoints() {
@@ -2717,21 +3740,40 @@
       const maxPrice = Number(document.getElementById('mapMaxPrice').value);
       const renderStyle = document.getElementById('mapRenderStyle').value;
 
-      document.getElementById('mapStatusText').textContent = 'กำลังกรองและวาดพิกัดทรัพย์...';
+      document.getElementById('mapStatusText').textContent = 'กำลังจัดกลุ่มพิกัดและวาดหมุดไอคอน...';
 
       let sourceList = [];
-      let isSold = (currentMapMode === 'sold');
+      const isSoldOnly = (currentMapMode === 'sold');
 
       if (currentMapMode === 'sold') {
-        sourceList = window.LED_SOLD || [];
+        sourceList = (window.LED_SOLD || []).map(x => { x._isSold = true; return x; });
       } else if (currentMapMode === 'deals') {
-        sourceList = window.LED_TOP_DEALS || [];
+        sourceList = (window.LED_TOP_DEALS || []).map(x => { x._isSold = false; return x; });
       } else if (currentMapMode === 'prov_npa') {
         if (prov === 'ALL') {
-          sourceList = window.LED_TOP_DEALS || [];
+          sourceList = (window.LED_TOP_DEALS || []).map(x => { x._isSold = false; return x; });
         } else {
-          sourceList = await loadProvinceChunk(prov);
+          const chunk = await loadProvinceChunk(prov);
+          sourceList = chunk.map(x => { x._isSold = false; return x; });
         }
+      } else if (currentMapMode === 'combined_prov') {
+        // Combined Province Mode: Sold for this prov + Active NPA for this prov
+        const soldItems = (window.LED_SOLD || [])
+          .filter(x => prov === 'ALL' || x[9] === prov)
+          .map(x => { x._isSold = true; return x; });
+        let npaItems = [];
+        if (prov === 'ALL') {
+          npaItems = (window.LED_TOP_DEALS || []).map(x => { x._isSold = false; return x; });
+        } else {
+          const chunk = await loadProvinceChunk(prov);
+          npaItems = chunk.map(x => { x._isSold = false; return x; });
+        }
+        sourceList = [...npaItems, ...soldItems];
+      } else if (currentMapMode === 'combined_deals') {
+        // Combined Deals Mode: All Sold + Top 3,000 Active Deals
+        const soldItems = (window.LED_SOLD || []).map(x => { x._isSold = true; return x; });
+        const npaItems = (window.LED_TOP_DEALS || []).map(x => { x._isSold = false; return x; });
+        sourceList = [...npaItems, ...soldItems];
       }
 
       const filtered = sourceList.filter(item => {
@@ -2742,7 +3784,23 @@
         return true;
       });
 
-      currentlyRenderedPoints = filtered;
+      // Group items sharing the exact same (lat, lon) coordinate
+      currentCoordGroupsMap = new Map();
+      for (let i = 0; i < filtered.length; i++) {
+        const pt = filtered[i];
+        const lat = pt[10];
+        const lon = pt[11];
+        if (!lat || !lon) continue;
+        const cKey = `${lat.toFixed(5)},${lon.toFixed(5)}`;
+        let grp = currentCoordGroupsMap.get(cKey);
+        if (!grp) {
+          grp = { key: cKey, lat, lon, items: [], casesSet: new Set(), hasNonCondo: false };
+          currentCoordGroupsMap.set(cKey, grp);
+        }
+        grp.items.push(pt);
+        grp.casesSet.add(pt[1]);
+        if (pt[2] !== 'ห้องชุด') grp.hasNonCondo = true;
+      }
 
       clusterGroup.clearLayers();
       canvasLayerGroup.clearLayers();
@@ -2753,31 +3811,116 @@
 
       const markers = [];
       const heatCoords = [];
-      const tc = getThemeColors();
+      const visiblePointsAfterCentroidFilter = [];
+      let hiddenCentroidCount = 0;
 
-      for (let i = 0; i < filtered.length; i++) {
-        const pt = filtered[i];
-        const lat = pt[10];
-        const lon = pt[11];
-        if (!lat || !lon) continue;
+      for (const [cKey, grp] of currentCoordGroupsMap.entries()) {
+        const count = grp.items.length;
+        // Classify as Approximate Tambon Centroid if >1 item, >=2 distinct red cases, and includes non-condo land/houses
+        grp.isCentroid = (count > 1 && grp.casesSet.size >= 2 && grp.hasNonCondo);
 
-        const color = getPointColor(pt, isSold);
-        const marker = L.circleMarker([lat, lon], {
-          radius: renderStyle === 'canvas' ? 5 : 7,
-          fillColor: color,
-          color: tc.markerBorder,
-          weight: 1.2,
-          opacity: 1,
-          fillOpacity: 0.9
+        if (hideCentroids && grp.isCentroid) {
+          hiddenCentroidCount += count;
+          continue;
+        }
+
+        visiblePointsAfterCentroidFilter.push(...grp.items);
+
+        // Separate pending items and sold items in the group
+        const pendingItems = grp.items.filter(it => !it._isSold);
+        const soldItems = grp.items.filter(it => it._isSold);
+        const hasPending = pendingItems.length > 0;
+        const isGroupAllSold = !hasPending && soldItems.length > 0;
+
+        // Sort items: pending first (by highest deal score), then sold (by highest competition ratio)
+        pendingItems.sort((a, b) => b[5] - a[5]);
+        soldItems.sort((a, b) => b[6] - a[6]);
+        grp.items = [...pendingItems, ...soldItems];
+
+        // Representative item:
+        // Prioritize pending items so investors know there is an actionable auction
+        const rep = hasPending ? pendingItems[0] : soldItems[0];
+        const repIsSold = isGroupAllSold;
+        const color = getPointColor(rep, repIsSold);
+        const iconClass = grp.isCentroid ? 'ri-focus-3-line' : getPropIconClass(rep[2]);
+
+        // Badge display
+        let badgeHTML = '';
+        if (count > 1) {
+          if (grp.isCentroid) {
+            badgeHTML = `<span class="pin-count-badge centroid-badge">กึ่งกลาง ${count}</span>`;
+          } else if (hasPending && soldItems.length > 0) {
+            badgeHTML = `<span class="pin-count-badge combo-badge">รอ ${pendingItems.length} | จบ ${soldItems.length}</span>`;
+          } else if (hasPending) {
+            if (rep[2] === 'ห้องชุด') {
+              badgeHTML = `<span class="pin-count-badge">${count} ยูนิต</span>`;
+            } else {
+              badgeHTML = `<span class="pin-count-badge">${count} แปลง</span>`;
+            }
+          } else {
+            badgeHTML = `<span class="pin-count-badge sold-badge">${count} ขายจบ</span>`;
+          }
+        }
+
+        // Build Pin HTML based on currentPinStyle
+        let pinBodyHTML = '';
+        const pinId = `pin-${cKey.replace(/[^0-9]/g, '')}`;
+
+        if (currentPinStyle === 'logo') {
+          if (isGroupAllSold) {
+            // Sold -> Grayscale LED Legal logo
+            pinBodyHTML = `
+              <div class="custom-pin-body is-logo is-sold ${grp.isCentroid ? 'is-centroid' : ''}">
+                <img src="Logo/led_legal_pin.png" alt="LED Sold" />
+              </div>
+            `;
+          } else {
+            // Active pending -> Vibrant magenta LED logo
+            pinBodyHTML = `
+              <div class="custom-pin-body is-logo ${grp.isCentroid ? 'is-centroid' : ''}">
+                <img src="Logo/led_pin.png" alt="LED Active" />
+              </div>
+            `;
+          }
+        } else {
+          // Property type pin mode
+          if (isGroupAllSold) {
+            pinBodyHTML = `
+              <div class="custom-pin-body is-sold ${grp.isCentroid ? 'is-centroid' : ''}" style="background:#64748b;">
+                <i class="${iconClass}"></i>
+              </div>
+            `;
+          } else {
+            pinBodyHTML = `
+              <div class="custom-pin-body ${grp.isCentroid ? 'is-centroid' : ''}" style="background:${color};">
+                <i class="${iconClass}"></i>
+              </div>
+            `;
+          }
+        }
+
+        const pinIcon = L.divIcon({
+          className: '',
+          html: `
+            <div class="custom-pin-wrap" id="${pinId}">
+              ${badgeHTML}
+              ${pinBodyHTML}
+            </div>
+          `,
+          iconSize: [32, 38],
+          iconAnchor: [16, 34]
         });
 
-        marker.on('click', () => openPropertyInspector(pt, isSold));
+        const marker = L.marker([grp.lat, grp.lon], { icon: pinIcon });
+        marker.on('click', () => onCustomPinClick(cKey, repIsSold, marker));
         markers.push(marker);
 
         if (isHeatVisible) {
-          heatCoords.push([lat, lon, 0.65]);
+          heatCoords.push([grp.lat, grp.lon, Math.min(1.0, 0.5 + count * 0.1)]);
         }
       }
+
+      currentlyRenderedPoints = visiblePointsAfterCentroidFilter;
 
       if (renderStyle === 'cluster') {
         if (mapInstance.hasLayer(canvasLayerGroup)) mapInstance.removeLayer(canvasLayerGroup);
@@ -2793,10 +3936,228 @@
         heatLayer = L.heatLayer(heatCoords, { radius: 22, blur: 16, maxZoom: 13 }).addTo(mapInstance);
       }
 
-      const modeName = isSold ? 'ขายจบแล้ว' : (currentMapMode === 'deals' ? 'Top Deals น่าลงทุน' : `ทรัพย์รอขาย (${prov})`);
-      document.getElementById('mapStatusText').textContent = `โหมด: ${modeName} | แสดง ${fmtNum(filtered.length)} จุด`;
+      let modeName = '';
+      if (currentMapMode === 'sold') modeName = 'ขายจบแล้ว';
+      else if (currentMapMode === 'deals') modeName = 'Top Deals น่าลงทุน';
+      else if (currentMapMode === 'prov_npa') modeName = `ทรัพย์รอขาย (${prov})`;
+      else if (currentMapMode === 'combined_prov') modeName = `รวม: ขายได้ + รอขาย (${prov})`;
+      else if (currentMapMode === 'combined_deals') modeName = `รวม: ขายได้ + Top 3,000 น่าลงทุน`;
+
+      const centroidNote = hiddenCentroidCount > 0 ? ` (ซ่อนพิกัดกึ่งกลาง ${fmtNum(hiddenCentroidCount)} แปลง)` : '';
+      document.getElementById('mapStatusText').textContent = `โหมด: ${modeName} | แสดง ${fmtNum(currentlyRenderedPoints.length)} รายการ (${fmtNum(markers.length)} หมุด)${centroidNote}`;
 
       updateRightSidebarAndZoneBadges();
+      updateBoundaryLayer();
+    }
+
+    // =========================================================================
+    // BOUNCY POPUP & MULTI-UNIT / CENTROID PIN INTERACTION
+    // =========================================================================
+    function onCustomPinClick(cKey, isSold, markerInstance) {
+      const grp = currentCoordGroupsMap.get(cKey);
+      if (!grp || !grp.items.length) return;
+
+      activePopupGroupKey = cKey;
+      activePopupUnitIdx = 0;
+
+      // Trigger bounce animation on the clicked pin DOM element
+      const el = markerInstance.getElement();
+      if (el) {
+        const wrap = el.querySelector('.custom-pin-wrap');
+        if (wrap) {
+          wrap.classList.remove('pin-bouncing');
+          void wrap.offsetWidth;
+          wrap.classList.add('pin-bouncing');
+        }
+      }
+
+      // Smoothly pan/fly map to center this pin right in the middle of the screen!
+      if (mapInstance && grp.lat && grp.lon) {
+        const targetZoom = Math.max(mapInstance.getZoom(), 15);
+        mapInstance.flyTo([grp.lat, grp.lon], targetZoom, { duration: 0.65 });
+      }
+
+      const firstItem = grp.items[0];
+      const actualIsSold = (firstItem._isSold !== undefined) ? firstItem._isSold : isSold;
+
+      openGroupBouncyPopup(grp, 0, actualIsSold);
+      openPropertyInspector(firstItem, actualIsSold, grp, 0);
+
+      // If this coordinate has multiple properties (Multi-Unit Condo or Tambon Centroid),
+      // automatically open the Bottom Drawer displaying all properties stacked at this pin!
+      if (grp.items.length > 1) {
+        openStackedPinInBottomDrawer(grp, actualIsSold);
+      }
+    }
+
+    function stepPopupUnit(delta, isSold) {
+      const grp = currentCoordGroupsMap.get(activePopupGroupKey);
+      if (!grp || !grp.items.length) return;
+      activePopupUnitIdx = (activePopupUnitIdx + delta + grp.items.length) % grp.items.length;
+      const targetItem = grp.items[activePopupUnitIdx];
+      const actualIsSold = (targetItem._isSold !== undefined) ? targetItem._isSold : isSold;
+      openGroupBouncyPopup(grp, activePopupUnitIdx, actualIsSold);
+      openPropertyInspector(targetItem, actualIsSold, grp, activePopupUnitIdx);
+    }
+
+    function openGroupBouncyPopup(grp, idx = 0, isSold = true) {
+      if (typeof idx === 'boolean') {
+        isSold = idx;
+        idx = 0;
+      }
+      if (!mapInstance || !grp || !grp.items || !grp.items.length) return;
+      idx = Math.max(0, Math.min(idx, grp.items.length - 1));
+      const item = grp.items[idx];
+      const count = grp.items.length;
+      const app = item[4];
+      const unitLabel = item[2] === 'ห้องชุด' ? 'ตร.ม.' : 'ตร.ว.';
+      const actualIsSold = (item._isSold !== undefined) ? item._isSold : isSold;
+
+      let headerBadge = '';
+      if (count > 1) {
+        const iconType = grp.isCentroid ? 'ri-focus-3-line' : 'ri-building-4-line';
+        const labelText = grp.isCentroid ? 'พิกัดกึ่งกลางตำบล' : 'พิกัดเดียวกัน';
+        const statusBadge = actualIsSold
+          ? '<span class="badge" style="background:#475569; color:#fff; font-size:10px; padding:1px 6px;"><i class="ri-checkbox-circle-fill"></i> ขายจบแล้ว</span>'
+          : '<span class="badge badge-emerald" style="font-size:10px; padding:1px 6px;"><i class="ri-vip-diamond-fill"></i> กำลังรอขาย</span>';
+
+        headerBadge = `
+          <div style="background:var(--bg-subtle); border:1px solid var(--border-color); padding:5px 8px; border-radius:6px; font-size:11px; font-weight:700; margin-bottom:6px; display:flex; align-items:center; justify-content:space-between;">
+            <span><i class="${iconType}"></i> ${labelText} (${count} รายการ)</span>
+            <span style="display:flex; align-items:center; gap:5px;">
+              ${statusBadge}
+              <span>#${idx + 1}/${count}</span>
+            </span>
+          </div>
+        `;
+      }
+
+      let priceCompareBlock = '';
+      if (actualIsSold) {
+        const sold = item[5];
+        const diffB = sold - app;
+        const diffP = ((item[6] - 1) * 100).toFixed(1);
+        const isHot = diffB >= 0;
+        const badgeTone = isHot ? 'badge-emerald' : 'badge-rose';
+        const hotTag = item[6] > 1.15 ? 'คนแย่งเคาะสูง!' : (isHot ? 'จบเกินประเมิน' : 'ต่ำกว่าประเมิน');
+
+        priceCompareBlock = `
+          <div style="background:var(--bg-subtle); border:1px solid var(--border-color); border-radius:8px; padding:8px 10px; margin:6px 0;">
+            <div style="display:flex; justify-content:space-between; font-size:12px;">
+              <span style="color:var(--text-secondary);">ราคาประเมิน:</span>
+              <span style="font-weight:600;">${fmtNum(app)} ฿</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; font-size:13px; margin-top:2px;">
+              <span style="color:var(--text-secondary);">ขายได้จริง:</span>
+              <span style="font-weight:700; color:${isHot ? 'var(--status-emerald)' : 'var(--status-rose)'};">${fmtNum(sold)} ฿</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:5px; padding-top:5px; border-top:1px dashed var(--border-color);">
+              <span class="badge ${badgeTone}">${diffP >= 0 ? '+' + diffP : diffP}% (${fmtCompactBaht(diffB)})</span>
+              <span style="font-size:11px; font-weight:700; color:${isHot ? 'var(--status-emerald)' : 'var(--text-secondary)'};">${hotTag}</span>
+            </div>
+          </div>
+        `;
+      } else {
+        const dealScore = item[5];
+        const disc = item[6];
+        priceCompareBlock = `
+          <div style="background:var(--bg-subtle); border:1px solid var(--border-color); border-radius:8px; padding:8px 10px; margin:6px 0;">
+            <div style="display:flex; justify-content:space-between; font-size:12.5px;">
+              <span style="color:var(--text-secondary);">ราคาประเมิน:</span>
+              <span style="font-weight:700;">${fmtNum(app)} ฿</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:5px;">
+              <span class="badge badge-emerald"><i class="ri-star-fill"></i> Deal Score ${dealScore}</span>
+              <span style="font-size:11.5px; font-weight:600; color:${disc >= 0 ? 'var(--status-emerald)' : 'var(--status-rose)'};">
+                ${disc >= 0 ? 'ถูกกว่าตลาด ' + disc + '%' : 'สูงกว่าค่ากลาง ' + Math.abs(disc) + '%'}
+              </span>
+            </div>
+          </div>
+        `;
+      }
+
+      const navButtons = count > 1 ? `
+        <div style="display:flex; gap:6px; margin-top:6px;">
+          <button class="btn btn-outline btn-sm" style="flex:1;" onclick="stepPopupUnit(-1, ${actualIsSold})">
+            <i class="ri-arrow-left-s-line"></i> ก่อนหน้า
+          </button>
+          <button class="btn btn-primary btn-sm" style="flex:1;" onclick="stepPopupUnit(1, ${actualIsSold})">
+            ถัดไป (${idx + 1}/${count}) <i class="ri-arrow-right-s-line"></i>
+          </button>
+        </div>
+      ` : '';
+
+      const popupHTML = `
+        <div style="min-width:255px;">
+          ${headerBadge}
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:6px;">
+            <span style="font-weight:700; font-size:13.5px; color:var(--text-primary);">
+              <i class="${getPropIconClass(item[2])}" style="color:var(--accent-blue);"></i> คดี ${item[1]}
+            </span>
+            <span class="badge badge-blue">${item[2]}</span>
+          </div>
+          <div style="font-size:11.5px; color:var(--text-secondary); margin-top:2px;">
+            ต.${item[7]} อ.${item[8]} จ.${item[9]} • เนื้อที่ ${item[12]} (${fmtNum(item[13], 1)} ${unitLabel})
+          </div>
+          ${priceCompareBlock}
+          <div style="font-size:11px; color:var(--text-muted); display:flex; justify-content:space-between;">
+            <span>โฉนด: ${item[15] || item[16]}</span>
+            <span>${item[3]}</span>
+          </div>
+          <div style="margin-top:6px; padding-top:6px; border-top:1px dashed var(--border-color); display:flex; justify-content:space-between; align-items:center;">
+            <a href="javascript:void(0)" onclick="openLedReportBridge('${item[1]}', '${actualIsSold ? (item[17] || '') : (item[18] || '')}', ${actualIsSold})" style="font-size:11.5px; font-weight:600; color:var(--accent-blue); text-decoration:none; display:inline-flex; align-items:center; gap:4px;">
+              <i class="${actualIsSold ? 'ri-government-line' : 'ri-search-eye-line'}"></i> ${actualIsSold ? 'ตรวจสอบผลขาย LED' : 'ค้นหาประกาศขาย LED'}
+            </a>
+            <span style="font-size:11px; color:var(--text-muted); font-weight:500;">${item[1]}</span>
+          </div>
+          ${navButtons}
+        </div>
+      `;
+
+      L.popup({
+        className: 'bouncy-map-popup',
+        offset: [0, -28],
+        maxWidth: 310,
+        closeButton: true,
+        autoPan: true
+      })
+        .setLatLng([grp.lat, grp.lon])
+        .setContent(popupHTML)
+        .openOn(mapInstance);
+    }
+
+    function openStackedPinInBottomDrawer(grp, isSold) {
+      const drawer = document.getElementById('bottomZoneDrawer');
+      drawer.classList.add('open');
+      const wrap = document.getElementById('mapWrapper');
+      if (wrap) wrap.classList.add('drawer-open');
+      bzdState.isOpen = true;
+      bzdState.selectedRowIdx = 0;
+
+      const labelType = grp.isCentroid ? 'พิกัดกึ่งกลางตำบล' : 'พิกัดเดียวกัน';
+      const first = grp.items[0];
+      bzdState.zoneName = `${labelType} ต.${first[7]} อ.${first[8]}`;
+      bzdState.zoneSub = `จ.${first[9]}`;
+      document.getElementById('bzdTitle').textContent = `${labelType}: ต.${first[7]} อ.${first[8]} (${grp.items.length} รายการ)`;
+
+      const soldItems = grp.items.filter(it => it._isSold);
+      const npaItems = grp.items.filter(it => !it._isSold);
+      bzdState.soldItems = soldItems;
+      bzdState.npaItems = npaItems;
+
+      document.getElementById('bzdSoldCount').textContent = fmtNum(soldItems.length);
+      document.getElementById('bzdNpaCount').textContent = fmtNum(npaItems.length);
+
+      if (npaItems.length > 0) {
+        bzdState.activeTab = 'npa';
+        document.getElementById('bzdTabNpa').classList.add('active');
+        document.getElementById('bzdTabSold').classList.remove('active');
+      } else {
+        bzdState.activeTab = 'sold';
+        document.getElementById('bzdTabSold').classList.add('active');
+        document.getElementById('bzdTabNpa').classList.remove('active');
+      }
+      renderBottomDrawerTable();
     }
 
     // =========================================================================
@@ -3024,17 +4385,17 @@
       document.getElementById('rsKpiContainer').innerHTML = `
         <div class="rs-kpi-box">
           <div class="rs-kpi-title">ส่วนต่างขายได้ vs ประเมิน</div>
-          <div class="rs-kpi-val" style="color:${netDiffBaht >= 0 ? 'var(--status-rose)' : 'var(--status-emerald)'};">${kpi1Main}</div>
+          <div class="rs-kpi-val" style="color:${netDiffBaht >= 0 ? 'var(--status-emerald)' : 'var(--status-rose)'};">${kpi1Main}</div>
           <div class="rs-kpi-sub">${kpi1Sub}</div>
         </div>
         <div class="rs-kpi-box">
-          <div class="rs-kpi-title">สัดส่วนแข่งเกินประเมิน</div>
-          <div class="rs-kpi-val" style="color:var(--status-rose);">${abovePctRate.toFixed(1)}%</div>
+          <div class="rs-kpi-title">สัดส่วนคนแย่งเกินประเมิน</div>
+          <div class="rs-kpi-val" style="color:var(--status-emerald);">${abovePctRate.toFixed(1)}%</div>
           <div class="rs-kpi-sub">${kpi2Sub}</div>
         </div>
         <div class="rs-kpi-box">
-          <div class="rs-kpi-title">สัดส่วนซื้อต่ำกว่าประเมิน</div>
-          <div class="rs-kpi-val" style="color:var(--status-emerald);">${belowPctRate.toFixed(1)}%</div>
+          <div class="rs-kpi-title">สัดส่วนจบต่ำกว่าประเมิน</div>
+          <div class="rs-kpi-val" style="color:var(--status-rose);">${belowPctRate.toFixed(1)}%</div>
           <div class="rs-kpi-sub">${kpi3Sub}</div>
         </div>
         <div class="rs-kpi-box">
@@ -3054,7 +4415,7 @@
         const pDiffP = ((bestPremItem[6] - 1) * 100).toFixed(0);
         hlHTML += `
           <div class="hl-card" onclick="inspectHighlightLot('topPremium')">
-            <div style="font-size:10.5px; font-weight:700; color:var(--status-rose); display:flex; align-items:center; gap:4px;">
+            <div style="font-size:10.5px; font-weight:700; color:var(--status-emerald); display:flex; align-items:center; gap:4px;">
               <i class="ri-fire-fill"></i> แข่งเดือดสูงสุดในพื้นที่
             </div>
             <div style="font-size:13.5px; font-weight:700; color:var(--text-primary); margin-top:2px;">
@@ -3071,8 +4432,8 @@
         const dDiffP = ((1 - bestDiscItem[6]) * 100).toFixed(1);
         hlHTML += `
           <div class="hl-card discount" onclick="inspectHighlightLot('topDiscount')">
-            <div style="font-size:10.5px; font-weight:700; color:var(--status-emerald); display:flex; align-items:center; gap:4px;">
-              <i class="ri-price-tag-3-fill"></i> ส่วนลดลึกสุดในพื้นที่
+            <div style="font-size:10.5px; font-weight:700; color:var(--status-rose); display:flex; align-items:center; gap:4px;">
+              <i class="ri-price-tag-3-fill"></i> ต่ำกว่าประเมินมากสุด
             </div>
             <div style="font-size:13.5px; font-weight:700; color:var(--text-primary); margin-top:2px;">
               -${dDiffP}% (${fmtCompactBaht(dDiffB)})
@@ -3131,7 +4492,7 @@
         const secondaryText = comparisonUnit === 'pct'
           ? `เฉลี่ย ${fmtCompactBaht(z.avgDiffBaht)}/แปลง (รวม ${fmtCompactBaht(z.netDiffBaht)})`
           : `เทียบประเมิน ${isPos ? '+' : ''}${z.diffPct.toFixed(1)}% (รวม ${fmtCompactBaht(z.netDiffBaht)})`;
-        const badgeCls = z.diffPct > 2 ? 'badge-rose' : (z.diffPct < -2 ? 'badge-emerald' : 'badge-amber');
+        const badgeCls = z.diffPct > 2 ? 'badge-emerald' : (z.diffPct < -2 ? 'badge-rose' : 'badge-amber');
 
         return `
           <div class="zone-item" onclick="selectZoneByIndex(${idx}, '${activeLevel}')">
@@ -3146,13 +4507,13 @@
 
             <div style="font-size:11.5px; color:var(--text-secondary); margin-top:3px; display:flex; justify-content:space-between;">
               <span>${secondaryText}</span>
-              <span>แข่งเกินประเมิน <strong style="color:var(--status-rose);">${z.abovePct.toFixed(0)}%</strong></span>
+              <span>คนแย่งเกินประเมิน <strong style="color:var(--status-emerald);">${z.abovePct.toFixed(0)}%</strong></span>
             </div>
 
-            <div class="zone-bar-track" title="แดง: แข่งเกินประเมิน ${z.abovePct.toFixed(1)}% | เขียว: ซื้อต่ำกว่าประเมิน ${z.belowPct.toFixed(1)}%">
-              <div style="width:${z.abovePct}%; background:#ef4444;"></div>
+            <div class="zone-bar-track" title="เขียว: แข่งเกินประเมิน ${z.abovePct.toFixed(1)}% | แดง: ซื้อต่ำกว่าประเมิน ${z.belowPct.toFixed(1)}%">
+              <div style="width:${z.abovePct}%; background:#10b981;"></div>
               <div style="width:${Math.max(0, 100 - z.abovePct - z.belowPct)}%; background:#f59e0b;"></div>
-              <div style="width:${z.belowPct}%; background:#10b981;"></div>
+              <div style="width:${z.belowPct}%; background:#ef4444;"></div>
             </div>
 
             <div style="font-size:11px; color:var(--text-muted); display:flex; justify-content:space-between;">
@@ -3211,6 +4572,8 @@
       // 2. Open Bottom Zone Property Drawer
       const drawer = document.getElementById('bottomZoneDrawer');
       drawer.classList.add('open');
+      const wrap = document.getElementById('mapWrapper');
+      if (wrap) wrap.classList.add('drawer-open');
 
       bzdState.isOpen = true;
       bzdState.zoneKey = z.key;
@@ -3349,18 +4712,25 @@
           const diffB = r[5] - r[4];
           const diffP = ((r[6] - 1) * 100).toFixed(1);
           const uLabel = r[2] === 'ห้องชุด' ? 'ตร.ม.' : 'ตร.ว.';
-          const bCls = r[6] > 1.02 ? 'badge-rose' : (r[6] < 0.98 ? 'badge-emerald' : 'badge-amber');
+          const bCls = r[6] > 1.02 ? 'badge-emerald' : (r[6] < 0.98 ? 'badge-rose' : 'badge-amber');
           return `
             <tr class="${bzdState.selectedRowIdx === i ? 'active-row' : ''}" onclick="focusPropertyFromBottomDrawer(${i})">
               <td>${i + 1}</td>
-              <td class="td-strong">${r[1]}</td>
+              <td class="td-strong">
+                <div style="display:flex; align-items:center; gap:6px;">
+                  <span>${r[1]}</span>
+                  <button class="btn btn-outline btn-sm" style="padding:2px 6px; font-size:11px; height:auto; line-height:1.2; border-radius:4px;" title="เปิดรายงานผลขายกรมบังคับคดี (LED Reports)" onclick="event.stopPropagation(); openLedReportBridge('${r[1]}', '${r[17] || ''}', true)">
+                    <i class="ri-government-line" style="color:var(--accent-blue);"></i> LED
+                  </button>
+                </div>
+              </td>
               <td>${r[2]}</td>
               <td><span class="badge badge-blue">${r[3]}</span></td>
               <td>ต.${r[7]} อ.${r[8]}</td>
               <td>${r[12]}</td>
               <td class="text-right">${fmtNum(r[4])}</td>
               <td class="text-right td-strong">${fmtNum(r[5])}</td>
-              <td class="text-right" style="color:${diffB >= 0 ? 'var(--status-rose)' : 'var(--status-emerald)'}; font-weight:600;">
+              <td class="text-right" style="color:${diffB >= 0 ? 'var(--status-emerald)' : 'var(--status-rose)'}; font-weight:600;">
                 ${diffB >= 0 ? '+' + fmtNum(diffB) : fmtNum(diffB)}
               </td>
               <td class="text-right"><span class="badge ${bCls}">${diffP >= 0 ? '+' + diffP : diffP}%</span></td>
@@ -3400,7 +4770,14 @@
             <tr class="${bzdState.selectedRowIdx === i ? 'active-row' : ''}" onclick="focusPropertyFromBottomDrawer(${i})">
               <td>${i + 1}</td>
               <td><span class="badge ${scoreCls}"><i class="ri-star-fill"></i> ${r[5]}</span></td>
-              <td class="td-strong">${r[1]}</td>
+              <td class="td-strong">
+                <div style="display:flex; align-items:center; gap:6px;">
+                  <span>${r[1]}</span>
+                  <button class="btn btn-outline btn-sm" style="padding:2px 6px; font-size:11px; height:auto; line-height:1.2; border-radius:4px;" title="ค้นหาประกาศขายทอดตลาด กรมบังคับคดี (กรอกคดี/ปี/ศาล)" onclick="event.stopPropagation(); openLedReportBridge('${r[1]}', '${r[18] || ''}', false)">
+                    <i class="ri-search-eye-line" style="color:var(--accent-blue);"></i> LED
+                  </button>
+                </div>
+              </td>
               <td>${r[2]}</td>
               <td><span class="badge ${r[3] === 'การจำนองติดไป' ? 'badge-rose' : 'badge-emerald'}">${r[3]}</span></td>
               <td>ต.${r[7]} อ.${r[8]}</td>
@@ -3440,14 +4817,40 @@
           iconAnchor: [11, 11]
         });
         targetPulseMarker = L.marker([lat, lon], { icon: pulseIcon, zIndexOffset: 5000 }).addTo(mapInstance);
-      }
 
-      openPropertyInspector(item, isSold);
+        // Open bouncy popup for this coordinate group or single item
+        const coordKey = `${lat.toFixed(5)},${lon.toFixed(5)}`;
+        let grp = currentCoordGroupsMap.get(coordKey);
+        if (grp) {
+          const foundIdx = grp.items.findIndex(x => x[0] === item[0] && x[1] === item[1]);
+          grp.activeIdx = foundIdx >= 0 ? foundIdx : 0;
+          activePopupGroupKey = coordKey;
+          activePopupUnitIdx = grp.activeIdx;
+          openGroupBouncyPopup(grp, grp.activeIdx, isSold);
+          openPropertyInspector(item, isSold, grp, grp.activeIdx);
+        } else {
+          openGroupBouncyPopup({
+            key: coordKey,
+            lat,
+            lon,
+            items: [item],
+            casesSet: new Set([item[1]]),
+            hasNonCondo: item[2] !== 'ห้องชุด',
+            isCentroid: false,
+            activeIdx: 0
+          }, 0, isSold);
+          openPropertyInspector(item, isSold, null, idx, bzdState.renderedItems);
+        }
+      } else {
+        openPropertyInspector(item, isSold, null, idx, bzdState.renderedItems);
+      }
     }
 
     function toggleBottomDrawerHeight() {
       const drawer = document.getElementById('bottomZoneDrawer');
       const isExp = drawer.classList.toggle('expanded');
+      const wrap = document.getElementById('mapWrapper');
+      if (wrap) wrap.classList.toggle('drawer-expanded', isExp);
       const btn = document.getElementById('bzdExpandBtn');
       btn.innerHTML = isExp
         ? `<i class="ri-contract-up-down-line"></i> ย่อลง`
@@ -3455,7 +4858,9 @@
     }
 
     function closeBottomDrawer() {
-      document.getElementById('bottomZoneDrawer').classList.remove('open');
+      document.getElementById('bottomZoneDrawer').classList.remove('open', 'expanded');
+      const wrap = document.getElementById('mapWrapper');
+      if (wrap) wrap.classList.remove('drawer-open', 'drawer-expanded');
       bzdState.isOpen = false;
       if (targetPulseMarker && mapInstance) {
         mapInstance.removeLayer(targetPulseMarker);
@@ -3470,12 +4875,12 @@
       const safeZone = bzdState.zoneName.replace(/[^ก-๙a-zA-Z0-9_-]/g, '');
 
       if (isSold) {
-        const headers = ['ID', 'เลขคดีแดง', 'ประเภททรัพย์', 'เงื่อนไขการขาย', 'ราคาประเมิน', 'ราคาขายได้', 'ส่วนต่าง(บาท)', 'สัดส่วนขายได้/ประเมิน', 'ตำบล', 'อำเภอ', 'จังหวัด', 'ละติจูด', 'ลองจิจูด', 'เนื้อที่', 'เลขโฉนด', 'โจทก์', 'ศาล', 'วันประกาศ', 'วันที่ขาย', 'จำนวนวันที่ขาย'];
-        const rows = rowsData.map(r => [r[0], r[1], r[2], r[3], r[4], r[5], r[5] - r[4], r[6], r[7], r[8], r[9], r[10], r[11], r[12], r[15], r[16], r[17], r[18], r[19], r[20]]);
+        const headers = ['ID', 'เลขคดีแดง', 'ประเภททรัพย์', 'เงื่อนไขการขาย', 'ราคาประเมิน', 'ราคาขายได้', 'ส่วนต่าง(บาท)', 'สัดส่วนขายได้/ประเมิน', 'ตำบล', 'อำเภอ', 'จังหวัด', 'ละติจูด', 'ลองจิจูด', 'เนื้อที่', 'เลขโฉนด', 'โจทก์', 'ศาล', 'วันประกาศ', 'วันที่ขาย', 'จำนวนวันที่ขาย', 'ลิงก์กรมบังคับคดี (LED Bridge)'];
+        const rows = rowsData.map(r => [r[0], r[1], r[2], r[3], r[4], r[5], r[5] - r[4], r[6], r[7], r[8], r[9], r[10], r[11], r[12], r[15], r[16], r[17], r[18], r[19], r[20], makeLedBridgeUrl(r[1], r[17], true)]);
         downloadCSV(`LED_Zone_Sold_${safeZone}_${rows.length}.csv`, headers, rows);
       } else {
-        const headers = ['ID', 'เลขคดีแดง', 'ประเภททรัพย์', 'เงื่อนไขการขาย', 'ราคาประเมิน', 'Deal_Score', 'ส่วนลดเทียบตลาด(%)', 'ตำบล', 'อำเภอ', 'จังหวัด', 'ละติจูด', 'ลองจิจูด', 'เนื้อที่', 'ราคาประเมินต่อหน่วย', 'ค่ากลางพื้นที่ต่อหน่วย', 'เลขโฉนด', 'โจทก์', 'ศาล', 'วันประกาศ', 'อายุประกาศ(วัน)', 'คาดการณ์นัดประมูล'];
-        const rows = rowsData.map(r => [r[0], r[1], r[2], r[3], r[4], r[5], r[6], r[7], r[8], r[9], r[10], r[11], r[12], r[14], r[15], r[16], r[17], r[18], r[19], r[20], r[21]]);
+        const headers = ['ID', 'เลขคดีแดง', 'ประเภททรัพย์', 'เงื่อนไขการขาย', 'ราคาประเมิน', 'Deal_Score', 'ส่วนลดเทียบตลาด(%)', 'ตำบล', 'อำเภอ', 'จังหวัด', 'ละติจูด', 'ลองจิจูด', 'เนื้อที่', 'ราคาประเมินต่อหน่วย', 'ค่ากลางพื้นที่ต่อหน่วย', 'เลขโฉนด', 'โจทก์', 'ศาล', 'วันประกาศ', 'อายุประกาศ(วัน)', 'คาดการณ์นัดประมูล', 'ลิงก์กรมบังคับคดี (LED Bridge)'];
+        const rows = rowsData.map(r => [r[0], r[1], r[2], r[3], r[4], r[5], r[6], r[7], r[8], r[9], r[10], r[11], r[12], r[14], r[15], r[16], r[17], r[18], r[19], r[20], r[21], makeLedBridgeUrl(r[1], r[18], false)]);
         downloadCSV(`LED_Zone_ActiveNPA_${safeZone}_${rows.length}.csv`, headers, rows);
       }
     }
@@ -3500,23 +4905,204 @@
       const item = currentZoneHighlightItems[which];
       if (!item || !mapInstance) return;
       if (item[10] && item[11]) {
-        mapInstance.flyTo([item[10], item[11]], 15, { duration: 0.85 });
+        const lat = item[10];
+        const lon = item[11];
+        mapInstance.flyTo([lat, lon], 15, { duration: 0.85 });
+        const coordKey = `${lat.toFixed(5)},${lon.toFixed(5)}`;
+        let grp = currentCoordGroupsMap.get(coordKey);
+        if (grp) {
+          const foundIdx = grp.items.findIndex(x => x[0] === item[0] && x[1] === item[1]);
+          grp.activeIdx = foundIdx >= 0 ? foundIdx : 0;
+          activePopupGroupKey = coordKey;
+          activePopupUnitIdx = grp.activeIdx;
+          openGroupBouncyPopup(grp, grp.activeIdx, true);
+          openPropertyInspector(item, true, grp, grp.activeIdx);
+        } else {
+          openGroupBouncyPopup({
+            key: coordKey,
+            lat,
+            lon,
+            items: [item],
+            casesSet: new Set([item[1]]),
+            hasNonCondo: item[2] !== 'ห้องชุด',
+            isCentroid: false,
+            activeIdx: 0
+          }, 0, true);
+          openPropertyInspector(item, true);
+        }
+      } else {
+        openPropertyInspector(item, true);
       }
-      openPropertyInspector(item, true);
     }
 
     // =========================================================================
     // PROPERTY INSPECTOR & 4-ROUND AUCTION SIMULATOR
     // =========================================================================
+    const inspectorContext = {
+      item: null,
+      isSold: true,
+      group: null,
+      idx: 0,
+      list: null
+    };
+
     function closeInspector() {
       document.getElementById('rsInspectorView').style.display = 'none';
       document.getElementById('rsZoneView').style.display = 'flex';
     }
 
-    function openPropertyInspector(item, isSold) {
-      document.getElementById('rightSidebar').classList.remove('collapsed');
+    function stepInspectorProperty(delta) {
+      if (inspectorContext.group && inspectorContext.group.items.length > 1) {
+        const grp = inspectorContext.group;
+        inspectorContext.idx = (inspectorContext.idx + delta + grp.items.length) % grp.items.length;
+        activePopupUnitIdx = inspectorContext.idx;
+        activePopupGroupKey = grp.key;
+        const item = grp.items[inspectorContext.idx];
+        const actualIsSold = (item._isSold !== undefined) ? item._isSold : inspectorContext.isSold;
+        openPropertyInspector(item, actualIsSold, grp, inspectorContext.idx);
+        openGroupBouncyPopup(grp, inspectorContext.idx, actualIsSold);
+      } else if (inspectorContext.list && inspectorContext.list.length > 1) {
+        const list = inspectorContext.list;
+        inspectorContext.idx = (inspectorContext.idx + delta + list.length) % list.length;
+        const item = list[inspectorContext.idx];
+        const actualIsSold = (item._isSold !== undefined) ? item._isSold : inspectorContext.isSold;
+        if (bzdState && bzdState.isOpen) {
+          bzdState.selectedRowIdx = inspectorContext.idx;
+          renderBottomDrawerTable();
+        }
+        openPropertyInspector(item, actualIsSold, null, inspectorContext.idx, list);
+        if (item[10] && item[11] && mapInstance) {
+          mapInstance.flyTo([item[10], item[11]], 16, { duration: 0.6 });
+          const coordKey = `${item[10].toFixed(5)},${item[11].toFixed(5)}`;
+          let grp = currentCoordGroupsMap.get(coordKey);
+          if (grp) openGroupBouncyPopup(grp, 0, actualIsSold);
+        }
+      }
+    }
+
+    function selectInspectorUnit(idx) {
+      if (inspectorContext.group && inspectorContext.group.items.length > idx) {
+        const grp = inspectorContext.group;
+        inspectorContext.idx = idx;
+        activePopupUnitIdx = idx;
+        activePopupGroupKey = grp.key;
+        const item = grp.items[idx];
+        const actualIsSold = (item._isSold !== undefined) ? item._isSold : inspectorContext.isSold;
+        openPropertyInspector(item, actualIsSold, grp, idx);
+        openGroupBouncyPopup(grp, idx, actualIsSold);
+      } else if (inspectorContext.list && inspectorContext.list.length > idx) {
+        const list = inspectorContext.list;
+        inspectorContext.idx = idx;
+        const item = list[idx];
+        const actualIsSold = (item._isSold !== undefined) ? item._isSold : inspectorContext.isSold;
+        if (bzdState && bzdState.isOpen) {
+          bzdState.selectedRowIdx = idx;
+          renderBottomDrawerTable();
+        }
+        openPropertyInspector(item, actualIsSold, null, idx, list);
+        if (item[10] && item[11] && mapInstance) {
+          mapInstance.flyTo([item[10], item[11]], 16, { duration: 0.6 });
+        }
+      }
+    }
+
+    function openPropertyInspector(item, isSold, grp = null, idx = 0, list = null) {
+      if (item && item._isSold !== undefined) {
+        isSold = item._isSold;
+      }
+      if (!grp && !list && activePopupGroupKey) {
+        const candidateGrp = currentCoordGroupsMap.get(activePopupGroupKey);
+        if (candidateGrp && candidateGrp.items.some(x => x[0] === item[0] && x[1] === item[1])) {
+          grp = candidateGrp;
+          idx = candidateGrp.items.findIndex(x => x[0] === item[0] && x[1] === item[1]);
+          if (idx < 0) idx = 0;
+        }
+      }
+      if (!grp && !list && bzdState && bzdState.isOpen && bzdState.renderedItems && bzdState.renderedItems.length > 1) {
+        const foundIdx = bzdState.renderedItems.findIndex(x => x[0] === item[0] && x[1] === item[1]);
+        if (foundIdx >= 0) {
+          list = bzdState.renderedItems;
+          idx = foundIdx;
+        }
+      }
+
+      inspectorContext.item = item;
+      inspectorContext.isSold = isSold;
+      inspectorContext.group = grp;
+      inspectorContext.idx = idx;
+      inspectorContext.list = list;
+
+      const sidebar = document.getElementById('rightSidebar');
+      sidebar.classList.remove('collapsed');
       document.getElementById('rsZoneView').style.display = 'none';
-      document.getElementById('rsInspectorView').style.display = 'flex';
+
+      const inspView = document.getElementById('rsInspectorView');
+      inspView.style.display = 'flex';
+      inspView.classList.remove('inspector-spring-bouncing');
+      void inspView.offsetWidth; // Force reflow to re-trigger bouncy spring animation
+      inspView.classList.add('inspector-spring-bouncing');
+
+      const bodyWrap = document.getElementById('inspBodyWrapper');
+      if (bodyWrap) {
+        bodyWrap.scrollTop = 0;
+      }
+
+      // Render pagination / unit chips bar
+      const navRow = document.getElementById('inspNavRow');
+      const chipsRow = document.getElementById('inspChipsRow');
+      const navInd = document.getElementById('inspNavIndicator');
+      const navSub = document.getElementById('inspNavSub');
+
+      if (grp && grp.items.length > 1) {
+        const count = grp.items.length;
+        navRow.style.display = 'flex';
+        navInd.textContent = `รายการที่ ${idx + 1} จาก ${count}`;
+        navSub.textContent = grp.isCentroid ? `พิกัดกึ่งกลาง (${count} แปลงคนละคดี)` : `พิกัดเดียวกัน (${count} แปลง/ยูนิต)`;
+
+        chipsRow.innerHTML = grp.items.map((it, i) => {
+          const activeCls = i === idx ? 'active' : '';
+          const deedOrCase = it[1];
+          const priceText = fmtCompactBaht(isSold ? it[5] : it[4]).replace('+', '');
+          return `
+            <button class="insp-chip ${activeCls}" onclick="selectInspectorUnit(${i})">
+              <i class="${getPropIconClass(it[2])}"></i>
+              <span>#${i + 1} ${deedOrCase} (${priceText})</span>
+            </button>
+          `;
+        }).join('');
+        chipsRow.style.display = 'flex';
+
+        setTimeout(() => {
+          const activeChip = chipsRow.children[idx];
+          if (activeChip) activeChip.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }, 50);
+      } else if (list && list.length > 1) {
+        const count = list.length;
+        navRow.style.display = 'flex';
+        navInd.textContent = `รายการที่ ${idx + 1} จาก ${count}`;
+        navSub.textContent = `รายการในโซน / ผลการค้นหา`;
+
+        chipsRow.innerHTML = list.slice(0, 30).map((it, i) => {
+          const activeCls = i === idx ? 'active' : '';
+          const deedOrCase = it[1];
+          const priceText = fmtCompactBaht(isSold ? it[5] : it[4]).replace('+', '');
+          return `
+            <button class="insp-chip ${activeCls}" onclick="selectInspectorUnit(${i})">
+              <i class="${getPropIconClass(it[2])}"></i>
+              <span>#${i + 1} ${deedOrCase} (${priceText})</span>
+            </button>
+          `;
+        }).join('');
+        chipsRow.style.display = 'flex';
+
+        setTimeout(() => {
+          const activeChip = chipsRow.children[idx];
+          if (activeChip) activeChip.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }, 50);
+      } else {
+        navRow.style.display = 'none';
+        chipsRow.style.display = 'none';
+      }
 
       const lat = item[10];
       const lon = item[11];
@@ -3530,14 +5116,14 @@
         const soldPrice = item[5];
         const ratioPct = (item[6] * 100).toFixed(1);
         const diffPct = ((item[6] - 1) * 100).toFixed(1);
-        const badgeClass = item[6] < 1 ? 'badge-emerald' : (item[6] > 1.15 ? 'badge-rose' : 'badge-amber');
+        const badgeClass = item[6] >= 1 ? 'badge-emerald' : (item[6] < 0.85 ? 'badge-rose' : 'badge-amber');
 
         document.getElementById('inspBadgeMode').className = 'badge badge-emerald';
         document.getElementById('inspBadgeMode').innerHTML = `<i class="ri-award-line"></i> ขายทอดตลาดสำเร็จ (${item[21]})`;
         document.getElementById('inspTitle').textContent = `คดี ${item[1]} (${item[2]})`;
 
         document.getElementById('inspBody').innerHTML = `
-          <div class="info-panel-box">
+          <div class="info-panel-box card-spring-pop">
             <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
               <span style="color:var(--text-secondary); font-size:12.5px;">ราคาประเมิน:</span>
               <span style="font-weight:600; color:var(--text-primary);">${fmtNum(appraisal)} บาท</span>
@@ -3552,7 +5138,7 @@
             </div>
           </div>
 
-          <div style="font-size:13px; display:grid; grid-template-columns:110px 1fr; gap:6px; margin-bottom:14px; color:var(--text-body);">
+          <div class="card-spring-pop" style="font-size:13px; display:grid; grid-template-columns:110px 1fr; gap:6px; margin-bottom:14px; color:var(--text-body);">
             <div style="color:var(--text-secondary);">ที่ตั้งทรัพย์:</div>
             <div>ต.${item[7]} อ.${item[8]} จ.${item[9]}</div>
             <div style="color:var(--text-secondary);">เงื่อนไขการขาย:</div>
@@ -3571,13 +5157,18 @@
             <div>${item[18]} → ${item[19]} (<strong>${item[20]} วัน</strong>)</div>
           </div>
 
-          <div style="display:flex; gap:8px; flex-wrap:wrap;">
-            <a href="${gmapUrl}" target="_blank" class="btn btn-primary" style="flex:1;">
-              <i class="ri-map-pin-line"></i> เปิด Google Maps
-            </a>
-            <a href="${streetUrl}" target="_blank" class="btn btn-amber" style="flex:1;">
-              <i class="ri-road-map-line"></i> ดู Street View
-            </a>
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            <button onclick="openLedReportBridge('${item[1]}', '${item[17] || ''}', true, '${item[16] || ''}')" class="btn" style="width:100%; background:linear-gradient(135deg, #0284c7, #1d4ed8); color:#ffffff; border:1px solid rgba(255,255,255,0.15); font-weight:600; padding:10px 14px; border-radius:8px; font-size:13px; display:flex; align-items:center; justify-content:center; gap:8px; box-shadow:0 4px 12px rgba(2,132,199,0.3); cursor:pointer;">
+              <i class="ri-government-line" style="font-size:16px;"></i> ค้นหาในรายงานขายทอดตลาด กรมบังคับคดี (LED Reports)
+            </button>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <a href="${gmapUrl}" target="_blank" class="btn btn-primary" style="flex:1;">
+                <i class="ri-map-pin-line"></i> เปิด Google Maps
+              </a>
+              <a href="${streetUrl}" target="_blank" class="btn btn-amber" style="flex:1;">
+                <i class="ri-road-map-line"></i> ดู Street View
+              </a>
+            </div>
           </div>
         `;
       } else {
@@ -3619,7 +5210,7 @@
         });
 
         document.getElementById('inspBody').innerHTML = `
-          <div class="info-panel-box">
+          <div class="info-panel-box card-spring-pop">
             <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
               <span style="color:var(--text-secondary); font-size:12.5px;">ราคาประเมินตั้งต้น:</span>
               <span style="font-weight:700; font-size:15px; color:var(--text-primary);">${fmtNum(appraisal)} บาท</span>
@@ -3640,7 +5231,7 @@
             </div>
           </div>
 
-          <div style="font-size:12.5px; display:grid; grid-template-columns:105px 1fr; gap:5px; margin-bottom:12px; color:var(--text-body);">
+          <div class="card-spring-pop" style="font-size:12.5px; display:grid; grid-template-columns:105px 1fr; gap:5px; margin-bottom:12px; color:var(--text-body);">
             <div style="color:var(--text-secondary);">ที่ตั้งทรัพย์:</div>
             <div>ต.${item[7]} อ.${item[8]} จ.${item[9]}</div>
             <div style="color:var(--text-secondary);">เงื่อนไขการขาย:</div>
@@ -3656,7 +5247,7 @@
           </div>
 
           <!-- 4-Round Auction Simulator -->
-          <div class="info-panel-box">
+          <div class="info-panel-box card-spring-pop">
             <div style="font-weight:700; font-size:13px; color:var(--text-primary); display:flex; align-items:center; gap:6px;">
               <i class="ri-calculator-line" style="color:var(--accent-blue);"></i> ตารางจำลองราคาเปิดประมูล 4 นัด (เทียบราคาตลาดในพื้นที่)
             </div>
@@ -3681,13 +5272,18 @@
             </div>
           </div>
 
-          <div style="display:flex; gap:8px; flex-wrap:wrap;">
-            <a href="${gmapUrl}" target="_blank" class="btn btn-primary" style="flex:1;">
-              <i class="ri-map-pin-line"></i> เปิด Google Maps
-            </a>
-            <a href="${streetUrl}" target="_blank" class="btn btn-amber" style="flex:1;">
-              <i class="ri-road-map-line"></i> ดู Street View
-            </a>
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            <button onclick="openLedReportBridge('${item[1]}', '${item[18] || ''}', false, '${item[17] || ''}')" class="btn" style="width:100%; background:linear-gradient(135deg, #059669, #0284c7); color:#ffffff; border:1px solid rgba(255,255,255,0.15); font-weight:600; padding:10px 14px; border-radius:8px; font-size:13px; display:flex; align-items:center; justify-content:center; gap:8px; box-shadow:0 4px 12px rgba(5,150,105,0.3); cursor:pointer;">
+              <i class="ri-search-eye-line" style="font-size:16px;"></i> ค้นหาทรัพย์ประกาศขายทอดตลาด กรมบังคับคดี (LED Search)
+            </button>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <a href="${gmapUrl}" target="_blank" class="btn btn-primary" style="flex:1;">
+                <i class="ri-map-pin-line"></i> เปิด Google Maps
+              </a>
+              <a href="${streetUrl}" target="_blank" class="btn btn-amber" style="flex:1;">
+                <i class="ri-road-map-line"></i> ดู Street View
+              </a>
+            </div>
           </div>
         `;
         updateCustomBidCalc(appraisal, unitArea, marketEstTotal, unitLabel);
@@ -3865,7 +5461,14 @@
           const bClass = r[6] < 1 ? 'badge-emerald' : (r[6] > 1.15 ? 'badge-rose' : 'badge-amber');
           return `
             <tr>
-              <td class="td-strong">${r[1]}</td>
+              <td class="td-strong">
+                <div style="display:flex; align-items:center; gap:6px;">
+                  <span>${r[1]}</span>
+                  <button class="btn btn-outline btn-sm" style="padding:2px 6px; font-size:11px; height:auto; line-height:1.2; border-radius:4px;" title="เปิดรายงานผลขายกรมบังคับคดี (LED Reports)" onclick="event.stopPropagation(); openLedReportBridge('${r[1]}', '${r[17] || ''}', true)">
+                    <i class="ri-government-line" style="color:var(--accent-blue);"></i> LED
+                  </button>
+                </div>
+              </td>
               <td>${r[2]}</td>
               <td><span class="badge badge-blue">${r[3]}</span></td>
               <td>ต.${r[7]} อ.${r[8]} จ.${r[9]}</td>
@@ -3874,9 +5477,12 @@
               <td class="text-right" style="color:var(--status-emerald); font-weight:700;">${fmtNum(r[5])}</td>
               <td class="text-right"><span class="badge ${bClass}">${pct}%</span></td>
               <td>${r[19]}</td>
-              <td class="text-center">
-                <button class="btn btn-primary btn-sm" onclick="inspectFromExplorer(${idx}, true)">
-                  <i class="ri-map-pin-line"></i> ดูพิกัด/ข้อมูล
+              <td class="text-center" style="white-space:nowrap;">
+                <button class="btn btn-primary btn-sm" onclick="inspectFromExplorer(${idx}, true)" style="margin-right:4px;">
+                  <i class="ri-map-pin-line"></i> ดูพิกัด
+                </button>
+                <button class="btn btn-outline btn-sm" onclick="openLedReportBridge('${r[1]}', '${r[17] || ''}', true)" title="ค้นหารายงานขายทอดตลาด กรมบังคับคดี (LED Reports)">
+                  <i class="ri-government-line"></i> LED
                 </button>
               </td>
             </tr>
@@ -3905,7 +5511,14 @@
           return `
             <tr>
               <td><span class="badge ${scoreClass}" style="font-size:12.5px;"><i class="ri-star-fill"></i> ${r[5]}</span></td>
-              <td class="td-strong">${r[1]}</td>
+              <td class="td-strong">
+                <div style="display:flex; align-items:center; gap:6px;">
+                  <span>${r[1]}</span>
+                  <button class="btn btn-outline btn-sm" style="padding:2px 6px; font-size:11px; height:auto; line-height:1.2; border-radius:4px;" title="ค้นหาประกาศขายทอดตลาด กรมบังคับคดี (กรอกคดี/ปี/ศาล)" onclick="event.stopPropagation(); openLedReportBridge('${r[1]}', '${r[18] || ''}', false)">
+                    <i class="ri-search-eye-line" style="color:var(--accent-blue);"></i> LED
+                  </button>
+                </div>
+              </td>
               <td>${r[2]}</td>
               <td><span class="badge ${r[3] === 'การจำนองติดไป' ? 'badge-rose' : 'badge-emerald'}">${r[3]}</span></td>
               <td>ต.${r[7]} อ.${r[8]} จ.${r[9]}</td>
@@ -3916,9 +5529,12 @@
                 ${disc >= 0 ? 'ถูกกว่า ' + disc + '%' : 'สูงกว่า ' + Math.abs(disc) + '%'}
               </td>
               <td class="text-center"><span class="badge badge-purple">นัด ${r[21]} (${r[22]}%)</span></td>
-              <td class="text-center">
-                <button class="btn btn-primary btn-sm" onclick="inspectFromExplorer(${idx}, false)">
+              <td class="text-center" style="white-space:nowrap;">
+                <button class="btn btn-primary btn-sm" onclick="inspectFromExplorer(${idx}, false)" style="margin-right:4px;">
                   <i class="ri-calculator-line"></i> คำนวณ/แผนที่
+                </button>
+                <button class="btn btn-outline btn-sm" onclick="openLedReportBridge('${r[1]}', '${r[18] || ''}', false)" title="ค้นหาประกาศขายทอดตลาด กรมบังคับคดี (กรอกคดี/ปี/ศาล)">
+                  <i class="ri-search-eye-line"></i> LED
                 </button>
               </td>
             </tr>
@@ -3974,12 +5590,20 @@
       });
 
       if (currentMapMode === 'sold') {
-        const headers = ['ID', 'เลขคดีแดง', 'ประเภททรัพย์', 'เงื่อนไขการขาย', 'ราคาประเมิน', 'ราคาขายได้', 'สัดส่วนขายได้/ประเมิน', 'ตำบล', 'อำเภอ', 'จังหวัด', 'ละติจูด', 'ลองจิจูด', 'เนื้อที่', 'เลขโฉนด', 'โจทก์', 'ศาล', 'วันประกาศ', 'วันที่ขาย', 'จำนวนวันที่ขาย'];
-        const rows = inBounds.map(r => [r[0], r[1], r[2], r[3], r[4], r[5], r[6], r[7], r[8], r[9], r[10], r[11], r[12], r[15], r[16], r[17], r[18], r[19], r[20]]);
+        const headers = ['ID', 'เลขคดีแดง', 'ประเภททรัพย์', 'เงื่อนไขการขาย', 'ราคาประเมิน', 'ราคาขายได้', 'สัดส่วนขายได้/ประเมิน', 'ตำบล', 'อำเภอ', 'จังหวัด', 'ละติจูด', 'ลองจิจูด', 'เนื้อที่', 'เลขโฉนด', 'โจทก์', 'ศาล', 'วันประกาศ', 'วันที่ขาย', 'จำนวนวันที่ขาย', 'ลิงก์กรมบังคับคดี (LED Bridge)'];
+        const rows = inBounds.map(r => [r[0], r[1], r[2], r[3], r[4], r[5], r[6], r[7], r[8], r[9], r[10], r[11], r[12], r[15], r[16], r[17], r[18], r[19], r[20], makeLedBridgeUrl(r[1], r[17], true)]);
         downloadCSV(`LED_Map_Sold_${inBounds.length}_items.csv`, headers, rows);
+      } else if (currentMapMode.startsWith('combined')) {
+        const headers = ['ID', 'สถานะ', 'เลขคดีแดง', 'ประเภททรัพย์', 'เงื่อนไขการขาย', 'ราคาประเมิน', 'ราคาขายได้/DealScore', 'สัดส่วนหรือส่วนลด', 'ตำบล', 'อำเภอ', 'จังหวัด', 'ละติจูด', 'ลองจิจูด', 'เนื้อที่', 'ลิงก์กรมบังคับคดี (LED Bridge)'];
+        const rows = inBounds.map(r => {
+          const st = r._isSold ? 'ขายจบแล้ว' : 'กำลังรอขาย';
+          const court = r._isSold ? (r[17] || '') : (r[18] || '');
+          return [r[0], st, r[1], r[2], r[3], r[4], r[5], r[6], r[7], r[8], r[9], r[10], r[11], r[12], makeLedBridgeUrl(r[1], court, !!r._isSold)];
+        });
+        downloadCSV(`LED_Map_Combined_${inBounds.length}_items.csv`, headers, rows);
       } else {
-        const headers = ['ID', 'เลขคดีแดง', 'ประเภททรัพย์', 'เงื่อนไขการขาย', 'ราคาประเมิน', 'Deal_Score', 'ส่วนลดเทียบตลาด(%)', 'ตำบล', 'อำเภอ', 'จังหวัด', 'ละติจูด', 'ลองจิจูด', 'เนื้อที่', 'ราคาประเมินต่อหน่วย', 'ค่ากลางพื้นที่ต่อหน่วย', 'เลขโฉนด', 'โจทก์', 'ศาล', 'วันประกาศ', 'อายุประกาศ(วัน)', 'คาดการณ์นัดประมูล'];
-        const rows = inBounds.map(r => [r[0], r[1], r[2], r[3], r[4], r[5], r[6], r[7], r[8], r[9], r[10], r[11], r[12], r[14], r[15], r[16], r[17], r[18], r[19], r[20], r[21]]);
+        const headers = ['ID', 'เลขคดีแดง', 'ประเภททรัพย์', 'เงื่อนไขการขาย', 'ราคาประเมิน', 'Deal_Score', 'ส่วนลดเทียบตลาด(%)', 'ตำบล', 'อำเภอ', 'จังหวัด', 'ละติจูด', 'ลองจิจูด', 'เนื้อที่', 'ราคาประเมินต่อหน่วย', 'ค่ากลางพื้นที่ต่อหน่วย', 'เลขโฉนด', 'โจทก์', 'ศาล', 'วันประกาศ', 'อายุประกาศ(วัน)', 'คาดการณ์นัดประมูล', 'ลิงก์กรมบังคับคดี (LED Bridge)'];
+        const rows = inBounds.map(r => [r[0], r[1], r[2], r[3], r[4], r[5], r[6], r[7], r[8], r[9], r[10], r[11], r[12], r[14], r[15], r[16], r[17], r[18], r[19], r[20], r[21], makeLedBridgeUrl(r[1], r[18], false)]);
         downloadCSV(`LED_Map_ActiveDeals_${inBounds.length}_items.csv`, headers, rows);
       }
     }
@@ -3990,12 +5614,12 @@
       if (!currentExplorerRows.length) return;
 
       if (isSold) {
-        const headers = ['ID', 'เลขคดีแดง', 'ประเภททรัพย์', 'เงื่อนไขการขาย', 'ราคาประเมิน', 'ราคาขายได้', 'สัดส่วนขายได้/ประเมิน', 'ตำบล', 'อำเภอ', 'จังหวัด', 'ละติจูด', 'ลองจิจูด', 'เนื้อที่', 'เลขโฉนด', 'โจทก์', 'ศาล', 'วันประกาศ', 'วันที่ขาย', 'จำนวนวันที่ขาย'];
-        const rows = currentExplorerRows.map(r => [r[0], r[1], r[2], r[3], r[4], r[5], r[6], r[7], r[8], r[9], r[10], r[11], r[12], r[15], r[16], r[17], r[18], r[19], r[20]]);
+        const headers = ['ID', 'เลขคดีแดง', 'ประเภททรัพย์', 'เงื่อนไขการขาย', 'ราคาประเมิน', 'ราคาขายได้', 'สัดส่วนขายได้/ประเมิน', 'ตำบล', 'อำเภอ', 'จังหวัด', 'ละติจูด', 'ลองจิจูด', 'เนื้อที่', 'เลขโฉนด', 'โจทก์', 'ศาล', 'วันประกาศ', 'วันที่ขาย', 'จำนวนวันที่ขาย', 'ลิงก์กรมบังคับคดี (LED Bridge)'];
+        const rows = currentExplorerRows.map(r => [r[0], r[1], r[2], r[3], r[4], r[5], r[6], r[7], r[8], r[9], r[10], r[11], r[12], r[15], r[16], r[17], r[18], r[19], r[20], makeLedBridgeUrl(r[1], r[17], true)]);
         downloadCSV(`LED_Explorer_Sold_${rows.length}.csv`, headers, rows);
       } else {
-        const headers = ['ID', 'เลขคดีแดง', 'ประเภททรัพย์', 'เงื่อนไขการขาย', 'ราคาประเมิน', 'Deal_Score', 'ส่วนลดเทียบตลาด(%)', 'ตำบล', 'อำเภอ', 'จังหวัด', 'ละติจูด', 'ลองจิจูด', 'เนื้อที่', 'ราคาประเมินต่อหน่วย', 'ค่ากลางพื้นที่ต่อหน่วย', 'เลขโฉนด', 'โจทก์', 'ศาล', 'วันประกาศ', 'อายุประกาศ(วัน)', 'คาดการณ์นัดประมูล'];
-        const rows = currentExplorerRows.map(r => [r[0], r[1], r[2], r[3], r[4], r[5], r[6], r[7], r[8], r[9], r[10], r[11], r[12], r[14], r[15], r[16], r[17], r[18], r[19], r[20], r[21]]);
+        const headers = ['ID', 'เลขคดีแดง', 'ประเภททรัพย์', 'เงื่อนไขการขาย', 'ราคาประเมิน', 'Deal_Score', 'ส่วนลดเทียบตลาด(%)', 'ตำบล', 'อำเภอ', 'จังหวัด', 'ละติจูด', 'ลองจิจูด', 'เนื้อที่', 'ราคาประเมินต่อหน่วย', 'ค่ากลางพื้นที่ต่อหน่วย', 'เลขโฉนด', 'โจทก์', 'ศาล', 'วันประกาศ', 'อายุประกาศ(วัน)', 'คาดการณ์นัดประมูล', 'ลิงก์กรมบังคับคดี (LED Bridge)'];
+        const rows = currentExplorerRows.map(r => [r[0], r[1], r[2], r[3], r[4], r[5], r[6], r[7], r[8], r[9], r[10], r[11], r[12], r[14], r[15], r[16], r[17], r[18], r[19], r[20], r[21], makeLedBridgeUrl(r[1], r[18], false)]);
         downloadCSV(`LED_Explorer_ActiveDeals_${rows.length}.csv`, headers, rows);
       }
     }
